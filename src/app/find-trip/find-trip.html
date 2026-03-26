@@ -1,0 +1,52 @@
+<div class="find-container">
+  <div class="add-trip-card">
+    <div class="card-header">
+      <div class="line-dot"></div>
+      <span>Cerca Corse(Ultime 4 corse)</span>
+    </div>
+
+    <div class="form-grid">
+     <div class="field">
+  <label>Città di Partenza</label>
+  <input 
+    type="text" 
+    [(ngModel)]="searchPartenza" 
+    list="city-list" 
+    placeholder="Seleziona o scrivi..." 
+  />
+</div>
+
+<div class="field">
+  <label>Destinazione</label>
+  <input 
+    type="text" 
+    [(ngModel)]="searchDestinazione" 
+    list="city-list" 
+    placeholder="Seleziona o scrivi..." 
+  />
+</div>
+
+<datalist id="city-list">
+  @for (city of availableCities(); track city) {
+    <option [value]="city"></option>
+  }
+</datalist>
+      
+      <button class="btn-add" (click)="find()" [disabled]="!searchPartenza || !searchDestinazione">
+        Find
+      </button>
+    </div>
+  </div>
+
+  <div class="results-section" style="margin-top: 20px;">
+    @for (t of filteredTrips(); track t.id) {
+       <app-trip-list [trip]="t"></app-trip-list>
+    } @empty {
+      @if (hasSearched()) {
+        <div class="empty-msg">Nessuna corsa trovata per questa tratta.</div>
+      }
+    }
+  </div>
+</div>
+
+

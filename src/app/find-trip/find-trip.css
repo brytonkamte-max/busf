@@ -1,0 +1,147 @@
+/* Container principale */
+.find-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card per il Form di Ricerca */
+.add-trip-card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(13, 27, 62, 0.1);
+  border: 1px solid #dfe6f5;
+  margin-bottom: 30px;
+}
+
+/* Header della card (stile Dark come le linee) */
+.card-header {
+  background: #081638;
+  color: white;
+  padding: 16px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.line-dot {
+  width: 12px;
+  height: 12px;
+  background-color: #2f64ff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #2f64ff;
+}
+
+/* Griglia per gli input */
+.form-grid {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Input stile moderno */
+.form-grid input {
+  padding: 12px 14px;
+  border: 1px solid #d9dfeb;
+  border-radius: 10px;
+  background: #f9fafb;
+  outline: none;
+  font-size: 14px;
+  color: #1f2937;
+  transition: all 0.2s ease;
+}
+
+.form-grid input:focus {
+  border-color: #2f64ff;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(47, 100, 255, 0.1);
+}
+
+/* Pulsante Find */
+.btn-add {
+  padding: 0 24px;
+  border: none;
+  border-radius: 10px;
+  background: #2f64ff;
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 45px; /* Perfettamente allineato */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.btn-add:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(47, 100, 255, 0.3);
+}
+
+.btn-add:disabled {
+  background: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Sezione Risultati */
+.results-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Messaggio "Nessun risultato" */
+.empty-msg {
+  text-align: center;
+  padding: 40px;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: 18px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Animazione per la comparsa dei risultati */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+/* Rende l'input chiaramente una scelta multipla */
+.form-grid input[list] {
+  cursor: pointer;
+}
+
+/* Opzionale: pulisce l'icona della lista su alcuni browser */
+.form-grid input::-webkit-calendar-picker-indicator {
+  display: block;
+  color: #2f64ff;
+  opacity: 0.5;
+}

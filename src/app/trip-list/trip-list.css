@@ -1,0 +1,103 @@
+.trip-card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+.trip-card:hover {
+  transform: scale(1.01);
+  border-color: #2f64ff;
+}
+
+.time-section {
+  padding-right: 20px;
+  border-right: 2px solid #f1f5f9;
+}
+
+.time {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #081638;
+}
+
+.route-section {
+  flex: 1;
+  padding: 0 25px;
+}
+
+.line-badge {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #2f64ff;
+  margin-bottom: 4px;
+}
+
+.path {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stop-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.destination {
+  color: #081638;
+}
+
+.arrow {
+  color: #94a3b8;
+  font-weight: bold;
+}
+
+.status-section {
+  display: flex;
+  gap: 8px;
+  margin-right: 15px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Colori Enum */
+.feriale { background: #e0f2fe; color: #0369a1; }
+.festivo { background: #fee2e2; color: #b91c1c; }
+.both { background: #f0fdf4; color: #16a34a; }
+.summer { background: #fef3c7; color: #92400e; }
+.winter { background: #f1f5f9; color: #475569; }
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  color: #ef4444;
+}
+
+/********** Sezione Aggiunta Nuova Fermata **********/      
+.date-small {
+  font-size: 0.75rem; /* Dimensione ridotta */
+  color: #6b7280;    /* Grigio discreto */
+  font-weight: 500;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}

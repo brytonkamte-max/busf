@@ -1,0 +1,63 @@
+<div class="page">
+  @if (line(); as currentLine) {
+    <button class="btn-back" (click)="goBack()">← Back</button>
+
+    <div class="content-wrapper">
+      <div class="line-card">
+        <div class="line-header">
+          <span class="line-dot"></span>
+          <span>LINE {{ currentLine.name }}</span>
+        </div>
+
+        <ul class="stop-list">
+          @for (stop of stops(); track stop.id; let i = $index) {
+            <li class="stop-item">
+              <div class="stop-track">
+                <div class="stop-circle">{{ stop.position }}</div>
+                @if (i < stops().length - 1) {
+                  <div class="stop-line"></div>
+                }
+              </div>
+
+              <div class="stop-info">
+                <div class="stop-city">{{ stop.city }}</div>
+                <div class="stop-address">{{ stop.address }}</div>
+                <a href="https://www.google.it/maps/search/{{ stop.address }}+{{ stop.city }}" target="_blank">Vedi</a>
+              </div>
+              
+              @if (stop.time !== null) {
+                <span class="stop-time">{{ stop.time }} min</span>
+              }
+
+              <button class="btn-delete" (click)="deleteStop(stop.id)">✕</button>
+            </li>
+          } @empty {
+            <li class="empty">No stops yet.</li>
+          }
+        </ul>
+
+        <div class="add-stop">
+          <div class="add-stop-title">Add Stop</div>
+          <div class="add-stop-row">
+            <input [(ngModel)]="newStop.position" type="number" placeholder="Pos" style="width: 60px;" />
+            <input [(ngModel)]="newStop.city" type="text" placeholder="City" />
+            <input [(ngModel)]="newStop.address" type="text" placeholder="Address" />
+            <input [(ngModel)]="newStop.time" type="number" placeholder="Min" style="width: 70px;" />
+
+            <button
+              (click)="addStop()"
+              [disabled]="!newStop.position || !newStop.city || !newStop.address"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+  }
+
+  @if (successMessage) { <p class="success">{{ successMessage }}</p> }
+  @if (errorMessage) { <p class="error">{{ errorMessage }}</p> }
+</div>

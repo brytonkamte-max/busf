@@ -1,0 +1,61 @@
+<div class="trip-page">
+  <div class="add-trip-card">
+    <div class="card-header">
+      <div class="line-dot"></div>
+      <span>Nuova Corsa</span>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Linea</label>
+        <select [(ngModel)]="newTrip.line">
+          <option [ngValue]="null">Seleziona...</option>
+          @for (line of lines(); track line.id) {
+            <option [ngValue]="line">LINE {{ line.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Partenza</label>
+        <input type="time" [(ngModel)]="newTrip.start" />
+      </div>
+
+      <div class="field">
+        <label>Tipo Giorno</label>
+      <select [(ngModel)]="newTrip.daytype" name="daytype" class="form-select">
+  <option value="FERIALE">Feriale</option>
+  <option value="FESTIVO">Festivo</option>
+  <option value="BOTH">Both</option>
+</select>
+      </div>
+
+      <div class="field">
+        <label>Stagione</label>
+      <select [(ngModel)]="newTrip.season" name="season" class="form-select">
+  <option value="SUMMER">summer</option> <option value="WINTER">Winter</option>   </select>
+      </div>
+
+        <div class="field">
+            <label>Data</label>
+            <input type="date" [(ngModel)]="newTrip.date" />
+        </div>
+
+
+      <button class="btn-add" (click)="addTrip()" [disabled]="!newTrip.line || !newTrip.start">
+        Add Trip
+      </button>
+    </div>
+  </div>
+
+<div class="trips-container">
+  @for (t of trips(); track t.id) {
+    <app-trip-list 
+      [trip]="t" 
+      (onDeleted)="removeLocally($event)">
+    </app-trip-list>
+  } @empty {
+    <div class="empty-state">Nessun viaggio programmato.</div>
+  }
+</div>
+</div>

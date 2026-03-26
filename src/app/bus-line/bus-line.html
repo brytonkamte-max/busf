@@ -1,0 +1,36 @@
+<div class="page">
+
+  <div class="top-bar">
+    <input [(ngModel)]="newLineName" type="text" placeholder="New line..." />
+    <button (click)="addLine()" [disabled]="!newLineName.trim()">Add Line</button>
+  </div>
+
+  <div class="search-bar">
+    <input
+      [(ngModel)]="search"
+      type="text"
+      placeholder="Search line or address..."
+    />
+    <button (click)="searchLines()">Search</button>
+  </div>
+
+  <div class="lines-container">
+    @for (line of lines(); track line.id) {
+      <div class="line-card" (click)="openLine(line)">
+        <div class="line-header">
+          <span class="line-dot"></span>
+          <span>LINE {{ line.name }}</span>
+        </div>
+
+        <div class="line-preview">
+          <span>{{ line.stops?.length ?? 0 }} stops</span>
+        </div>
+      </div>
+    } @empty {
+      <div class="empty">
+        No lines yet.
+      </div>
+    }
+  </div>
+
+</div>

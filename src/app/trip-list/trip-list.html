@@ -1,0 +1,28 @@
+<div class="trip-card">
+  <div class="time-section">
+    <span class="time">{{ trip.start }}</span>
+    <span class="date-small">{{ trip.date | date:'dd/MM/yyyy' }}</span>
+  </div>
+
+
+  <div class="route-section">
+    <div class="line-badge">LINEA {{ trip.line?.name }}</div>
+    <div class="path">
+      <span class="stop-name">{{ firstStop }}</span>
+      <span class="arrow">→</span>
+      <span class="stop-name destination">{{ lastStop }}</span>
+    </div>
+  </div>
+
+<div class="status-section">
+  <span class="badge" [ngClass]="trip.dayType?.toLowerCase()">
+    {{ trip.dayType }}
+  </span>
+  
+  <span class="badge" [ngClass]="trip.season?.toLowerCase()">
+    {{ trip.season }}
+  </span>
+</div>
+
+  <button (click)="remove()"> ✕ </button>
+</div>
