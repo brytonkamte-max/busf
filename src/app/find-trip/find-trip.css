@@ -145,3 +145,28 @@
   color: #2f64ff;
   opacity: 0.5;
 }
+
+.traffic-field {
+  grid-column: span 2;
+}
+
+.traffic-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.traffic-slider {
+  flex: 1;
+  accent-color: #2f64ff;
+  height: 6px;
+  cursor: pointer;
+}
+
+.traffic-label-badge {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f2937;
+  white-space: nowrap;
+  min-width: 160px;
+}
