@@ -26,14 +26,14 @@
       <select [(ngModel)]="newTrip.daytype" name="daytype" class="form-select">
   <option value="FERIALE">Feriale</option>
   <option value="FESTIVO">Festivo</option>
-  <option value="BOTH">Both</option>
+  <option value="BOTH">Entrambi</option>
 </select>
       </div>
 
       <div class="field">
         <label>Stagione</label>
       <select [(ngModel)]="newTrip.season" name="season" class="form-select">
-  <option value="SUMMER">summer</option> <option value="WINTER">Winter</option>   </select>
+  <option value="SUMMER">Estiva</option> <option value="WINTER">Invernale</option>   </select>
       </div>
 
         <div class="field">
@@ -43,15 +43,15 @@
 
 
       <button class="btn-add" (click)="addTrip()" [disabled]="!newTrip.line || !newTrip.start">
-        Add Trip
+        Aggiungi Corsa
       </button>
     </div>
   </div>
 
 <div class="trips-container">
   @for (t of trips(); track t.id) {
-    <app-trip-list 
-      [trip]="t" 
+    <app-trip-list
+      [trip]="t"
       (onDeleted)="removeLocally($event)">
     </app-trip-list>
   } @empty {

@@ -1,17 +1,17 @@
 <div class="page">
 
   <div class="top-bar">
-    <input [(ngModel)]="newLineName" type="text" placeholder="New line..." />
-    <button (click)="addLine()" [disabled]="!newLineName.trim()">Add Line</button>
+    <input [(ngModel)]="newLineName" type="text" placeholder="Esempio: z228, 423..." />
+    <button (click)="addLine()" [disabled]="!newLineName.trim()">Aggiungi</button>
   </div>
 
   <div class="search-bar">
     <input
       [(ngModel)]="search"
       type="text"
-      placeholder="Search line or address..."
+      placeholder="Cerca linea o indirizzo..."
     />
-    <button (click)="searchLines()">Search</button>
+    <button (click)="searchLines()">Cerca</button>
   </div>
 
   <div class="lines-container">
@@ -28,7 +28,7 @@
       </div>
     } @empty {
       <div class="empty">
-        No lines yet.
+        Non ci sono linee da visualizzare.
       </div>
     }
   </div>
