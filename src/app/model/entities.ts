@@ -23,5 +23,6 @@ export interface Trip {
   stops: Stop[];
   line?: any;
   date: string; // Aggiunta della proprietà date
+  trafficMultiplier: number;
 }
  
