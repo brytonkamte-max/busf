@@ -26,6 +26,18 @@
   />
 </div>
 
+
+ <div class="field">
+  <label>Orario Partenza</label>
+  <input type="time" [(ngModel)]="searchTime" />
+</div>
+
+<div class="field">
+  <label>Data</label>
+  <input type="date" [(ngModel)]="searchDate" />
+</div>
+
+
 <datalist id="city-list">
   @for (city of availableCities(); track city) {
     <option [value]="city"></option>

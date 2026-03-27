@@ -52,4 +52,7 @@ get lastStop(): string {
     error: (err) => console.error("Errore server:", err)
   });
 }
+
+
+
 }
