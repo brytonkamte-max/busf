@@ -41,18 +41,6 @@ export class BusLine implements OnInit {
   }
 
 
-  addLine(): void {
-    if (!this.newLineName.trim()) return;
-
-
-    this.busLineService.createLine(this.newLineName).subscribe(() => {
-      this.newLineName = '';
-      this.loadLines();
-    });
-  }
-
-
-
 searchLines(): void {
   if (!this.search.trim()) {
     this.loadLines();

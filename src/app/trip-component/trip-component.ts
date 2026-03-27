@@ -23,6 +23,10 @@ export class TripComponent implements OnInit {
   // AGGIUNGI QUESTE RIGHE: Dichiarazione messaggi
   errorMessage: string | null = null;
   successMessage: string | null = null;
+  successMessage2: string | null = null;
+
+
+  newLineName: string = '';
 
  newTrip = {
   start: '',
@@ -30,6 +34,7 @@ export class TripComponent implements OnInit {
   season: 'SUMMER',  // Verifica se il backend vuole WINTER o INVERNO
   line: null as Line | null,
   date: '' // Aggiunta data se necessaria
+ 
 };
 
   ngOnInit(): void {
@@ -97,6 +102,28 @@ export class TripComponent implements OnInit {
     error: (err) => {
       console.error("Errore:", err);
       this.errorMessage = "Errore nel salvataggio";
+    }
+  });
+}
+
+addLine(): void {
+    this.errorMessage = null;
+  this.successMessage2 = null;
+  // Se il nome è vuoto, non fare nulla
+  if (!this.newLineName.trim()) return;
+
+  this.lineService.createLine(this.newLineName).subscribe({
+    next: () => {
+      // 1. Pulisce il campo input
+      this.newLineName = ''; 
+      // 2. Messaggio di successo
+      this.successMessage2 = "Linea creata con successo!";
+      // 3. RICARICA i dati per aggiornare la tendina (select)
+      this.loadData();
+    },
+    error: (err) => {
+      console.error("Errore creazione linea:", err);
+      this.errorMessage = "Impossibile creare la linea";
     }
   });
 }
