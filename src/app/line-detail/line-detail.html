@@ -39,7 +39,16 @@
         <div class="add-stop">
           <div class="add-stop-title">Aggiungi una fermata</div>
           <div class="add-stop-row">
-            <input [(ngModel)]="newStop.position" type="number" placeholder="Pos." min="1" class="input-pos" style="width: 60px;" />
+
+            <select [(ngModel)]="newStop.position" class="input-pos">
+              <option [ngValue]="null" disabled selected>Pos.</option>
+              @for (pos of availablePositions(); track pos) {
+                <option [ngValue]="pos">
+                  {{ pos === stops().length + 1 ? pos + ' (Coda)' : pos }}
+                </option>
+              }
+            </select>
+
             <input [(ngModel)]="newStop.city" type="text" placeholder="Città" />
             <input [(ngModel)]="newStop.address" type="text" placeholder="Indirizzo" />
             <input [(ngModel)]="newStop.time" type="number" placeholder="Min" min="1" class="input-minutes" style="width: 70px;" />
