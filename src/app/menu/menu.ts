@@ -24,7 +24,7 @@ export class Menu {
 
     { label: 'Linee',    icon: '🚌', route: 'lines'    },
 
-    { label: 'Corse',    icon: '🔀', route: 'trips'    },
+    { label: 'Nuova corsa',    icon: '➕', route: 'trips'    },
 
     { label: 'Cerca corse', icon: '🔍', route: 'Findtrips' },
   ];

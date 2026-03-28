@@ -1,7 +1,6 @@
 .menu {
   display: flex;
   align-items: center;
-  /* Diminuiamo il padding sinistro per portare il logo più a bordo */
   padding: 0 15px;
   height: 64px;
   background: #0f172a;
@@ -16,7 +15,8 @@
   text-decoration: none;
   cursor: pointer;
   /* Margine destro per separare il gruppo logo dai tasti menu */
-  margin-right: 20px;
+  /*margin-right: 20px;*/
+  flex: 1; /* 🔥 fondamentale */
 }
 
 .menu-logo img {
@@ -36,17 +36,18 @@
 
 .menu-list {
   display: flex;
-  align-items: center;
-  gap: 5px;
+  justify-content: center; /* centra gli elementi */
+  gap: 20px;
   list-style: none;
-  padding: 0;
   margin: 0;
-  margin-left: 130px;
+  padding: 0;
+
+  flex: 1; /* 🔥 fondamentale */
 }
 
 .menu-item {
   display: flex;
-  align-items: right;
+  align-items: center;
   gap: 7px;
   padding: 8px 16px;
   border-radius: 8px;
