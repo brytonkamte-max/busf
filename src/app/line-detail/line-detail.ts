@@ -64,7 +64,7 @@ successMessage = '';
 
       this.newStop = { position: null, city: '', address: '', time: null };
 
-      this.successMessage = 'Stop inserita correttamente!';
+      this.successMessage = 'Fermata inserita correttamente!';
       this.errorMessage = '';
     },
 
@@ -75,7 +75,7 @@ successMessage = '';
       if (err.status === 400) {
         this.errorMessage = 'Errore: posizione o indirizzo già esistente!';
       } else {
-        this.errorMessage = 'Errore durante l\'inserimento dello stop.';
+        this.errorMessage = 'Errore durante l\'inserimento della fermata.';
       }
 
       this.successMessage = '';
