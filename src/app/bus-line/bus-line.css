@@ -106,3 +106,24 @@
   color: white;
   cursor: pointer;
 }
+
+.btn-delete-line {
+  background: none;
+  border: 1px solid #ff4d4f;
+  color: #ff4d4f;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  margin-bottom: 1em;
+  margin-left: 63em;
+  margin-right: 1em;
+}
+
+.btn-delete-line:hover {
+  background: #ff4d4f;
+  color: white;
+  box-shadow: 0 2px 8px rgba(255, 77, 79, 0.2);
+}
+

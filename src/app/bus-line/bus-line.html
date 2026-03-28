@@ -25,6 +25,10 @@
         <div class="line-preview">
           <span>{{ line.stops?.length ?? 0 }} stops</span>
         </div>
+
+        <button class="btn-delete-line" (click)="deleteLine(line.id); $event.stopPropagation()">
+          <i class="fas fa-trash"></i> Elimina
+        </button>
       </div>
     } @empty {
       <div class="empty">
