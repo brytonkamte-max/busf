@@ -46,42 +46,55 @@ successMessage = '';
   }
 
   addStop(): void {
-  const currentLine = this.line();
-  if (!currentLine) return;
+    const currentLine = this.line();
+    if (!currentLine) return;
 
-  if (!this.newStop.position || !this.newStop.city || !this.newStop.address) return;
+    // 1. Validazione rigorosa
+    // Verifichiamo che i numeri siano presenti e > 0, e che le stringhe non siano vuote
+    const isPositionInvalid = this.newStop.position === null || this.newStop.position <= 0;
+    const isTimeInvalid = this.newStop.time === null || this.newStop.time <= 0;
+    const isTextInvalid = !this.newStop.city.trim() || !this.newStop.address.trim();
 
-  this.busStopService.createStop(currentLine.id, {
-    position: this.newStop.position,
-    city: this.newStop.city,
-    address: this.newStop.address,
-    time: this.newStop.time
-  }).subscribe({
-    next: (stop) => {
-      this.stops.update((list) =>
-        [...list, stop].sort((a, b) => a.position - b.position)
-      );
-
-      this.newStop = { position: null, city: '', address: '', time: null };
-
-      this.successMessage = 'Fermata inserita correttamente!';
-      this.errorMessage = '';
-    },
-
-    error: (err) => {
-      console.log(err);
-
-      // messaggio personalizzato
-      if (err.status === 400) {
-        this.errorMessage = 'Errore: posizione o indirizzo già esistente!';
-      } else {
-        this.errorMessage = 'Errore durante l\'inserimento della fermata.';
-      }
-
+    if (isPositionInvalid || isTimeInvalid || isTextInvalid) {
+      this.errorMessage = 'Tutti i campi sono obbligatori. Posizione e minuti devono essere maggiori di 0.';
       this.successMessage = '';
+      return;
     }
-  });
-}
+
+    // 2. Chiamata al servizio
+    this.busStopService.createStop(currentLine.id, {
+      position: this.newStop.position!, // Usiamo l'operatore ! perché abbiamo appena validato che non è null
+      city: this.newStop.city,
+      address: this.newStop.address,
+      time: this.newStop.time!
+    }).subscribe({
+      next: (stop) => {
+        // Aggiorniamo la lista locale delle fermate
+        this.stops.update((list) =>
+          [...list, stop].sort((a, b) => a.position - b.position)
+        );
+
+        // Reset del form
+        this.newStop = { position: null, city: '', address: '', time: null };
+
+        this.successMessage = 'Fermata inserita correttamente!';
+        this.errorMessage = '';
+      },
+      error: (err) => {
+        console.error('Errore durante il salvataggio:', err);
+
+        if (err.status === 400) {
+          this.errorMessage = 'Errore: la posizione o l\'indirizzo sono già presenti per questa linea.';
+        } else if (err.status === 403) {
+          this.errorMessage = 'Errore 403: Non hai i permessi per aggiungere fermate.';
+        } else {
+          this.errorMessage = 'Si è verificato un errore imprevisto.';
+        }
+
+        this.successMessage = '';
+      }
+    });
+  }
 
   deleteStop(stopId: number): void {
   const currentLine = this.line();

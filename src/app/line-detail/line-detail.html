@@ -39,10 +39,10 @@
         <div class="add-stop">
           <div class="add-stop-title">Aggiungi una fermata</div>
           <div class="add-stop-row">
-            <input [(ngModel)]="newStop.position" type="number" placeholder="Pos" style="width: 60px;" />
+            <input [(ngModel)]="newStop.position" type="number" placeholder="Pos." min="1" class="input-pos" style="width: 60px;" />
             <input [(ngModel)]="newStop.city" type="text" placeholder="Città" />
             <input [(ngModel)]="newStop.address" type="text" placeholder="Indirizzo" />
-            <input [(ngModel)]="newStop.time" type="number" placeholder="Min" style="width: 70px;" />
+            <input [(ngModel)]="newStop.time" type="number" placeholder="Min" min="1" class="input-minutes" style="width: 70px;" />
 
             <button
               (click)="addStop()"
