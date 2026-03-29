@@ -1,17 +1,15 @@
 <div class="page">
 
-  <div class="top-bar">
-    <input [(ngModel)]="newLineName" type="text" placeholder="Esempio: z228, 423..." />
-    <button (click)="addLine()" [disabled]="!newLineName.trim()">Aggiungi</button>
-  </div>
+  <div class="controls-wrapper">
+    <div class="control-row">
+      <input [(ngModel)]="newLineName" type="text" placeholder="Nuova linea (es: z228, 423...)" />
+      <button class="btn-main" (click)="addLine()" [disabled]="!newLineName.trim()">Aggiungi</button>
+    </div>
 
-  <div class="search-bar">
-    <input
-      [(ngModel)]="search"
-      type="text"
-      placeholder="Cerca linea o indirizzo..."
-    />
-    <button (click)="searchLines()">Cerca</button>
+    <div class="control-row">
+      <input [(ngModel)]="search" type="text" placeholder="Cerca linea o indirizzo..." />
+      <button class="btn-main" (click)="searchLines()">Cerca</button>
+    </div>
   </div>
 
   <div class="lines-container">
@@ -19,16 +17,18 @@
       <div class="line-card" (click)="openLine(line)">
         <div class="line-header">
           <span class="line-dot"></span>
-          <span>LINE {{ line.name }}</span>
+          <span>LINEA {{ line.name }}</span>
         </div>
 
-        <div class="line-preview">
-          <span>{{ line.stops?.length ?? 0 }} stops</span>
-        </div>
+        <div class="line-content">
+          <div class="line-preview">
+            <span>{{ line.stops?.length ?? 0 }} fermate</span>
+          </div>
 
-        <button class="btn-delete-line" (click)="deleteLine(line.id); $event.stopPropagation()">
-          <i class="fas fa-trash"></i> Elimina
-        </button>
+          <button class="btn-delete-line" (click)="deleteLine(line.id); $event.stopPropagation()">
+            <i class="fas fa-trash"></i> Elimina
+          </button>
+        </div>
       </div>
     } @empty {
       <div class="empty">
