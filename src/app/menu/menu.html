@@ -1,13 +1,17 @@
 <nav class="menu">
-  
-  <div class="menu-logo">
+
+  <a routerLink="/" class="menu-logo">
     <img src="logo.png" width="32" height="32" alt="logo" />
-  </div>
+    <span class="logo-text">Brianza<strong>Bus</strong></span>
+  </a>
 
   <ul class="menu-list">
     @for (item of menuItems; track item.label) {
       <li>
-        <a class="menu-item" [routerLink]="item.route" routerLinkActive="active">
+        <a class="menu-item"
+           [routerLink]="item.route"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: item.exact || false }">
           <span>{{ item.icon }}</span>
           <span>{{ item.label }}</span>
         </a>

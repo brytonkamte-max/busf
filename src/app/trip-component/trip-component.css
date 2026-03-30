@@ -84,7 +84,7 @@
 }
 
 /* Stile Input e Select per matchare la top-bar */
-.form-grid input, 
+.form-grid input,
 .form-grid select {
   padding: 10px 12px;
   border: 1px solid #d9dfeb;
@@ -96,7 +96,7 @@
   transition: border-color 0.2s;
 }
 
-.form-grid input:focus, 
+.form-grid input:focus,
 .form-grid select:focus {
   border-color: #2f64ff;
 }
@@ -192,14 +192,20 @@
   .form-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .trip-info {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .trip-details {
     flex-direction: column;
     gap: 4px;
   }
+}
+
+.empty-state {
+  padding: 16px;
+  color: #8a94a8;
+  font-style: italic;
 }

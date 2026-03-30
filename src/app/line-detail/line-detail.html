@@ -1,12 +1,12 @@
 <div class="page">
   @if (line(); as currentLine) {
-    <button class="btn-back" (click)="goBack()">← Back</button>
+    <button class="btn-back" (click)="goBack()">← Torna indietro</button>
 
     <div class="content-wrapper">
       <div class="line-card">
         <div class="line-header">
           <span class="line-dot"></span>
-          <span>LINE {{ currentLine.name }}</span>
+          <span>LINEA {{ currentLine.name }}</span>
         </div>
 
         <ul class="stop-list">
@@ -24,7 +24,7 @@
                 <div class="stop-address">{{ stop.address }}</div>
                 <a href="https://www.google.it/maps/search/{{ stop.address }}+{{ stop.city }}" target="_blank">Vedi</a>
               </div>
-              
+
               @if (stop.time !== null) {
                 <span class="stop-time">{{ stop.time }} min</span>
               }
@@ -32,29 +32,38 @@
               <button class="btn-delete" (click)="deleteStop(stop.id)">✕</button>
             </li>
           } @empty {
-            <li class="empty">No stops yet.</li>
+            <li class="empty">Non ci sono fermate da visualizzare.</li>
           }
         </ul>
 
         <div class="add-stop">
-          <div class="add-stop-title">Add Stop</div>
+          <div class="add-stop-title">Aggiungi una fermata</div>
           <div class="add-stop-row">
-            <input [(ngModel)]="newStop.position" type="number" placeholder="Pos" style="width: 60px;" />
-            <input [(ngModel)]="newStop.city" type="text" placeholder="City" />
-            <input [(ngModel)]="newStop.address" type="text" placeholder="Address" />
-            <input [(ngModel)]="newStop.time" type="number" placeholder="Min" style="width: 70px;" />
+
+            <select [(ngModel)]="newStop.position" class="input-pos">
+              <option [ngValue]="null" disabled selected>Pos.</option>
+              @for (pos of availablePositions(); track pos) {
+                <option [ngValue]="pos">
+                  {{ pos === stops().length + 1 ? pos + ' (Coda)' : pos }}
+                </option>
+              }
+            </select>
+
+            <input [(ngModel)]="newStop.city" type="text" placeholder="Città" />
+            <input [(ngModel)]="newStop.address" type="text" placeholder="Indirizzo" />
+            <input [(ngModel)]="newStop.time" type="number" placeholder="Min" min="1" class="input-minutes" style="width: 70px;" />
 
             <button
               (click)="addStop()"
               [disabled]="!newStop.position || !newStop.city || !newStop.address"
             >
-              Add
+              Aggiungi
             </button>
           </div>
         </div>
       </div>
 
-      
+
     </div>
   }
 

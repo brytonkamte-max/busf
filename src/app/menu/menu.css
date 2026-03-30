@@ -1,8 +1,7 @@
 .menu {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 28px;
+  padding: 0 15px;
   height: 64px;
   background: #0f172a;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -10,38 +9,45 @@
 
 .menu-logo {
   display: flex;
-  align-items: left-center;
-  gap: 12px;
-  margin-right: 32px;
+  align-items: center;
+  /* Ridotto il gap tra immagine e testo BrianzaBus */
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  /* Margine destro per separare il gruppo logo dai tasti menu */
+  /*margin-right: 20px;*/
+  flex: 1; /* 🔥 fondamentale */
 }
 
 .menu-logo img {
-  width: 200px;
-  height: 70px;
+  /* Ridotto la larghezza fissa che creava lo spazio vuoto */
+  width: 45px;
+  height: auto;
   object-fit: contain;
-  border-radius: 8px;
 }
 
 .menu-logo span {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 20px; /* Leggermente più grande per visibilità */
+  font-weight: 800;
   color: #ffffff;
   font-family: sans-serif;
-  letter-spacing: 0.3px;
+  letter-spacing: -0.5px; /* Rende il font più moderno e compatto */
 }
 
 .menu-list {
   display: flex;
-  align-items: right;
-  gap: 2px;
+  justify-content: center; /* centra gli elementi */
+  gap: 20px;
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
+
+  flex: 1; /* 🔥 fondamentale */
 }
 
 .menu-item {
   display: flex;
-  align-items: right;
+  align-items: center;
   gap: 7px;
   padding: 8px 16px;
   border-radius: 8px;
@@ -63,3 +69,16 @@
   color: #ffffff;
   font-weight: 600;
 }
+
+.menu-logo span {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff; /* Testo bianco come nel tuo screenshot */
+  font-family: sans-serif;
+}
+
+.menu-logo:hover {
+  opacity: 0.9;
+}
+
+.logo-text strong { color: #1a56db; }

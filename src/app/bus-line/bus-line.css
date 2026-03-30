@@ -4,10 +4,58 @@
   padding: 20px;
   background: #f5f7fb;
   min-height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* --- NUOVO LAYOUT CONTROLLI --- */
+.controls-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(13, 27, 62, 0.05);
+}
 
+.control-row {
+  display: flex;
+  gap: 10px;
+}
+
+.control-row input {
+  flex: 1; /* L'input prende tutto lo spazio disponibile, allineando le due barre */
+  padding: 12px 15px;
+  border: 1px solid #d9dfeb;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.control-row input:focus {
+  border-color: #2f64ff;
+}
+
+.btn-main {
+  min-width: 100px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #2f64ff;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-main:disabled {
+  background: #a5b4fc;
+  cursor: not-allowed;
+}
+
+/* --- CARD --- */
 .lines-container {
   display: flex;
   flex-direction: column;
@@ -22,10 +70,11 @@
   border: 1px solid #dfe6f5;
   cursor: pointer;
   transition: 0.2s;
+  position: relative; /* Necessario per il posizionamento del tasto Elimina */
 }
 
 .line-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: 0 10px 22px rgba(13, 27, 62, 0.12);
 }
 
@@ -47,14 +96,42 @@
   background: #2f64ff;
 }
 
+.line-content {
+  padding: 20px 18px 50px 18px; /* Padding extra sotto per non sovrapporsi al tasto */
+}
+
 .line-preview {
-  padding: 16px 18px;
   color: #6b7280;
-  font-size: 14px;
+  font-size: 15px;
+}
+
+/* --- TASTO ELIMINA (SISTEMATO) --- */
+.btn-delete-line {
+  position: absolute; /* Si aggancia alla card */
+  bottom: 15px;       /* Distanza dal bordo inferiore */
+  right: 18px;        /* Distanza dal bordo destro */
+
+  background: white;
+  border: 1px solid #ff4d4f;
+  color: #ff4d4f;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-delete-line:hover {
+  background: #ff4d4f;
+  color: white;
 }
 
 .empty {
-  padding: 16px;
+  padding: 30px;
+  text-align: center;
   color: #8a94a8;
   font-style: italic;
 }
