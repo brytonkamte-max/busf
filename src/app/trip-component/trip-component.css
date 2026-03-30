@@ -5,6 +5,32 @@
   padding: 20px;
   font-family: Arial, sans-serif;
 }
+/* --- AGGIUNTO: Card per la Gestione Linee (stesso stile della tua add-trip-card) --- */
+.admin-card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(13, 27, 62, 0.08);
+  border: 1px solid #dfe6f5;
+  margin-bottom: 24px;
+}
+/* --- AGGIUNTO: Layout interno per l'input della linea --- */
+.add-line-inline {
+  padding: 20px;
+  display: flex;
+  gap: 12px;
+}
+/* Applichiamo i tuoi stili di input anche a quello della linea */
+.add-line-inline input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #d9dfeb;
+  border-radius: 10px;
+  background: white;
+  outline: none;
+  font-size: 14px;
+  color: #1f2937;
+}
 
 /* Card per il Form di inserimento */
 .add-trip-card {
@@ -26,6 +52,13 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}
+  /* Punto blu accanto al titolo */
+.line-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #2f64ff;
 }
 
 /* Griglia per gli input */
@@ -90,6 +123,7 @@
   background: #cbd5e1;
   cursor: not-allowed;
 }
+
 
 /* Tabella o Lista dei Trip salvati */
 .trips-container {

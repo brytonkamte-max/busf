@@ -135,3 +135,25 @@
   color: #8a94a8;
   font-style: italic;
 }
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #d9dfeb;
+  border-radius: 10px;
+}
+
+.search-bar button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #2f64ff;
+  color: white;
+  cursor: pointer;
+}
