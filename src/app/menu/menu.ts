@@ -19,15 +19,16 @@ interface MenuItem {
   styleUrl: './menu.css',
 })
 export class Menu {
-  
+
   portalUserService = inject(PortalUserService);
-  
+
    menuItems: MenuItem[] = [
     { label: 'Home', route: '/', icon: '🏠'},
 
     { label: 'Dashboard',    icon: '📊', route: 'trips', requiresAuth: true },
-  
-    
+
+    { label: 'Nuova corsa', icon: '➕', route: 'trips', requiresAuth: true },
+
     { label: 'FindTrip', icon: '🔍', route: 'Findtrips' },
   ];
 
