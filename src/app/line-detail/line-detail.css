@@ -5,12 +5,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
 
 :host {
-  --bg:           #f5f5f4;
+  --bg:           #f8fafc;
   --surface:      #ffffff;
   --surface-alt:  #fafaf9;
   --border:       #e7e5e4;
   --border-focus: #a8a29e;
-  --accent:       #2563eb;
+  --accent:       #2f64ff;
   --accent-light: #eff6ff;
   --accent-hover: #1d4ed8;
   --red:          #dc2626;
@@ -34,9 +34,9 @@
 
 /* ---- PAGE ---- */
 .page {
-  max-width: 680px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 40px 24px 80px;
+  padding: 40px 24px;
 }
 
 /* ---- HEADER ---- */
@@ -115,10 +115,14 @@
 /* ---- TIMELINE ---- */
 .timeline-section {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
+  border: none !important;
+  border-left: 5px solid #06284f !important;
+  border-radius: 4px 24px 24px 4px !important;
+  box-shadow: 0 12px 30px rgba(47, 100, 255, 0.08) !important;
   overflow: hidden;
+  padding: 20px 30px; /* Più spazio interno */
+  margin-bottom: 30px;
+  animation: slideUp 0.5s ease-out;
 }
 
 .stop-list {
@@ -140,7 +144,7 @@
 .stop-item:nth-child(n+5){ animation-delay: 160ms; }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -390,14 +394,20 @@
 
 /* ---- TOASTS ---- */
 .toast {
+position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  min-width: 250px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 11px 15px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  animation: toastIn 0.2s ease both;
+  gap: 10px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  animation: toastIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
 }
 @keyframes toastIn {
   from { opacity: 0; transform: translateY(-4px); }

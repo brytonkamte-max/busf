@@ -52,10 +52,9 @@ export class BusLineService {
   }
  */
 
-  searchLines(term: string) {
+searchLines(term: string) {
   return this.http.get<Line[]>(
-    `${this.apiLinesUrl}/search/city?city=${encodeURIComponent(term)}`
-  
+    `${this.apiLinesUrl}/search?query=${encodeURIComponent(term)}`
   );
 }
   

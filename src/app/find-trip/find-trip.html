@@ -1,65 +1,94 @@
-<div class="find-container">
-  <div class="add-trip-card">
-    <div class="card-header">
-      <div class="line-dot"></div>
-      <span>Cerca corse (ultime 4)</span>
+<div class="page-wrapper">
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      
+      <div class="search-container-premium">
+        <div class="search-header">
+          <h2>Cerca corse (ultime 4)</h2>
+        </div>
+
+        <div class="search-body">
+          <div class="form-row main-route">
+            <div class="field">
+              <label>Città di partenza</label>
+              <div class="input-group">
+                <span class="icon">📍</span>
+                <input type="text" [(ngModel)]="searchPartenza" list="city-list" placeholder="Da dove parti?">
+              </div>
+            </div>
+
+            <button class="btn-swap-round" (click)="swapCities()">⇄</button>
+
+            <div class="field">
+              <label>Destinazione</label>
+              <div class="input-group">
+                <span class="icon">🏁</span>
+                <input type="text" [(ngModel)]="searchDestinazione" list="city-list" placeholder="Dove vai?">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row secondary-info">
+            <div class="field">
+              <label>Orario partenza</label>
+              <input type="time" [(ngModel)]="searchTime">
+            </div>
+            <div class="field">
+              <label>Data</label>
+              <input type="date" [(ngModel)]="searchDate">
+            </div>
+            
+          </div>
+
+          <button class="btn-search-hero" (click)="find()" [disabled]="!searchPartenza || !searchDestinazione">
+            <span class="search-icon">🔍</span> CERCA
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="info-grid-section">
+    <div class="info-card">
+      <div class="info-card-header">
+        <span class="emoji">📋</span>
+        <h3>Ultime corse cercate</h3>
+      </div>
+      <div class="info-card-body">
+         @for (t of filteredTrips(); track t.id) {
+            <app-trip-list [trip]="t"></app-trip-list>
+         } @empty {
+            <p class="empty-text">Nessuna ricerca recente</p>
+         }
+      </div>
     </div>
 
-    <div class="form-grid">
-     <div class="field">
-  <label>Città di Partenza</label>
-  <input
-    type="text"
-    [(ngModel)]="searchPartenza"
-    list="city-list"
-    placeholder="Seleziona o scrivi..."
-  />
+    <div class="info-card">
+      <div class="info-card-header">
+        <span class="emoji">📍</span>
+        <h3>Tratte popolari</h3>
+      </div>
+      <ul class="popular-routes">
+        <li>Monza ↔ Milano</li>
+        <li>Monza ↔ Carate</li>
+        <li>Seregno ↔ Monza</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-header">
+        <span class="emoji">🏔️</span>
+        <h3>Mete consigliate</h3>
+      </div>
+      <p class="promo-text">Scopri la Brianza questo weekend con le nostre linee extraurbane.</p>
+    </div>
+  </section>
 </div>
-
-<div class="field">
-  <label>Destinazione</label>
-  <input
-    type="text"
-    [(ngModel)]="searchDestinazione"
-    list="city-list"
-    placeholder="Seleziona o scrivi..."
-  />
-</div>
-
-
- <div class="field">
-  <label>Orario Partenza</label>
-  <input type="time" [(ngModel)]="searchTime" />
-</div>
-
-<div class="field">
-  <label>Data</label>
-  <input type="date" [(ngModel)]="searchDate" />
-</div>
-
 
 <datalist id="city-list">
   @for (city of availableCities(); track city) {
     <option [value]="city"></option>
   }
 </datalist>
-         
-    
-      <button class="btn-add" (click)="find()" [disabled]="!searchPartenza || !searchDestinazione">
-        Cerca
-      </button>
-    </div>
-  </div>
-
-  <div class="results-section" style="margin-top: 20px;">
-    @for (t of filteredTrips(); track t.id) {
-       <app-trip-list [trip]="t"></app-trip-list>
-    } @empty {
-      @if (hasSearched()) {
-        <div class="empty-msg">Nessuna corsa trovata per questa tratta.</div>
-      }
-    }
-  </div>
-</div>
-
-
