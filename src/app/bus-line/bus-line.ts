@@ -32,6 +32,18 @@ export class BusLine implements OnInit {
     });
   }
 
+  getFirstCity(line: Line): string {
+  if (!line.stops || line.stops.length === 0) return 'Origine non definita';
+  return [...line.stops].sort((a, b) => a.position - b.position)[0].city;
+}
+
+getLastCity(line: Line): string {
+  if (!line.stops || line.stops.length === 0) return 'Destinazione non definita';
+  const sorted = [...line.stops].sort((a, b) => a.position - b.position);
+  return sorted[sorted.length - 1].city;
+}
+
+
   openLine(line: Line): void {
     this.router.navigate(['/lines', line.id]);
   }
