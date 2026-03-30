@@ -1,104 +1,228 @@
 .trip-card {
   background: white;
-  border-radius: 14px;
-  padding: 16px 20px;
-  margin-bottom: 12px;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   border: 1px solid #e2e8f0;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s;
+  transition: all 0.2s ease;
 }
 
 .trip-card:hover {
-  transform: scale(1.01);
-  border-color: #2f64ff;
+  transform: translateY(-2px);
+  border-color: #3b82f6;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
+.is-delayed {
+  border-left: 6px solid #f59e0b; /* Arancione traffico */
+}
+
+/* SEZIONE ORARI (SINISTRA) */
 .time-section {
-  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-right: 25px;
   border-right: 2px solid #f1f5f9;
+  min-width: 150px;
 }
 
-.time {
+.time-block { display: flex; flex-direction: column; }
+
+.label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.time-value {
   font-size: 1.3rem;
   font-weight: 800;
-  color: #081638;
+  color: #1e293b;
 }
 
+.on-time-tag {
+  font-size: 0.7rem;
+  color: #10b981;
+  font-weight: 600;
+}
+
+.text-red { color: #ef4444; }
+
+.delay-tag {
+  font-size: 0.75rem;
+  color: #ef4444;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* SEZIONE PERCORSO (CENTRO) */
 .route-section {
   flex: 1;
-  padding: 0 25px;
+  padding: 0 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.line-badge {
-  font-size: 0.7rem;
-  font-weight: 900;
-  color: #2f64ff;
-  margin-bottom: 4px;
+.line-name {
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
 }
 
-.path {
+.path-display {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  font-size: 1.1rem;
 }
 
-.stop-name {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #334155;
-}
+.city { font-weight: 600; color: #334155; }
+.city.destination { color: #0f172a; font-weight: 800; }
+.arrow { color: #cbd5e1; }
 
-.destination {
-  color: #081638;
-}
-
-.arrow {
-  color: #94a3b8;
-  font-weight: bold;
-}
-
-.status-section {
+/* BADGES E INFO */
+.meta-info {
   display: flex;
-  gap: 8px;
-  margin-right: 15px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #e2e8f0;
 }
 
 .badge {
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
 }
 
-/* Colori Enum */
-.feriale { background: #e0f2fe; color: #0369a1; }
-.festivo { background: #fee2e2; color: #b91c1c; }
-.both { background: #f0fdf4; color: #16a34a; }
-.summer { background: #fef3c7; color: #92400e; }
-.winter { background: #f1f5f9; color: #475569; }
+.day.feriale { background: #f0fdf4; color: #16a34a; }
+.day.festivo { background: #fef2f2; color: #dc2626; }
+.season.summer { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+.season.winter { background: #f0f9ff; color: #0284c7; border: 1px solid #bae6fd; }
 
+.date-display {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* BOTTONE ELIMINA */
 .delete-btn {
-  background: none;
+  background: #f1f5f9;
   border: none;
-  color: #cbd5e1;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: #94a3b8;
   cursor: pointer;
-  font-size: 1.2rem;
-  transition: 0.2s;
+  transition: all 0.2s;
+  font-weight: bold;
 }
 
 .delete-btn:hover {
+  background: #fee2e2;
   color: #ef4444;
+  transform: rotate(90deg);
+}
+/* ... mantieni gli stili precedenti per .trip-card e .time-section ... */
+
+.arrival-container {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
-/********** Sezione Aggiunta Nuova Fermata **********/      
-.date-small {
-  font-size: 0.75rem; /* Dimensione ridotta */
-  color: #6b7280;    /* Grigio discreto */
+.original-arrival {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  text-decoration: line-through;
   font-weight: 500;
+}
+
+.time-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.text-red {
+  color: #ef4444 !important;
+}
+
+.delay-tag {
+  font-size: 0.75rem;
+  color: #ef4444;
+  font-weight: 700;
   margin-top: 2px;
-  letter-spacing: 0.5px;
   display: block;
+}
+
+.on-time-tag {
+  font-size: 0.7rem;
+  color: #10b981;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Stile per i badge Stagione/Giorno (Sincronizzati) */
+.meta-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.badge {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.day.feriale { background: #f0fdf4; color: #16a34a; }
+.day.festivo { background: #fef2f2; color: #dc2626; }
+.season.summer { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+.season.winter { background: #f0f9ff; color: #0284c7; border: 1px solid #bae6fd; }
+
+.date-display {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* Bottone elimina migliorato */
+.delete-btn {
+  background: #f1f5f9;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: #94a3b8;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  background: #fee2e2;
+  color: #ef4444;
+  transform: rotate(90deg);
 }

@@ -1,211 +1,229 @@
-/* Container principale che eredita il padding della pagina */
-.trip-page {
-  max-width: 900px;
+:host {
+  --primary: #2f64ff;
+  --primary-light: #eef2ff;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg-main: #f8fafc;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+}
+
+.dashboard-container {
+  max-width: 1300px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
-/* --- AGGIUNTO: Card per la Gestione Linee (stesso stile della tua add-trip-card) --- */
-.admin-card {
-  background: white;
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(13, 27, 62, 0.08);
-  border: 1px solid #dfe6f5;
-  margin-bottom: 24px;
-}
-/* --- AGGIUNTO: Layout interno per l'input della linea --- */
-.add-line-inline {
-  padding: 20px;
-  display: flex;
-  gap: 12px;
-}
-/* Applichiamo i tuoi stili di input anche a quello della linea */
-.add-line-inline input {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #d9dfeb;
-  border-radius: 10px;
-  background: white;
-  outline: none;
-  font-size: 14px;
-  color: #1f2937;
+  padding: 30px 20px;
+  background-color: var(--bg-main);
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Card per il Form di inserimento */
-.add-trip-card {
-  background: white;
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(13, 27, 62, 0.08);
-  border: 1px solid #dfe6f5;
-  margin-bottom: 24px;
-}
-
-/* Header del form che richiama lo stile delle Linee */
-.card-header {
-  background: #081638;
-  color: white;
-  padding: 14px 18px;
-  font-size: 18px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-  /* Punto blu accanto al titolo */
-.line-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #2f64ff;
-}
-
-/* Griglia per gli input */
-.form-grid {
-  padding: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
-  align-items: flex-end;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.field label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #4b5563;
-  margin-left: 4px;
-}
-
-/* Stile Input e Select per matchare la top-bar */
-.form-grid input,
-.form-grid select {
-  padding: 10px 12px;
-  border: 1px solid #d9dfeb;
-  border-radius: 10px;
-  background: white;
-  outline: none;
-  font-size: 14px;
-  color: #1f2937;
-  transition: border-color 0.2s;
-}
-
-.form-grid input:focus,
-.form-grid select:focus {
-  border-color: #2f64ff;
-}
-
-/* Pulsante Add Line style */
-.btn-add {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  background: #2f64ff;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-  height: 41px; /* Allineato agli input */
-}
-
-.btn-add:hover:not(:disabled) {
-  background: #1d4ed8;
-  transform: translateY(-1px);
-}
-
-.btn-add:disabled {
-  background: #cbd5e1;
-  cursor: not-allowed;
-}
-
-
-/* Tabella o Lista dei Trip salvati */
-.trips-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.trip-item {
-  background: white;
-  border-radius: 14px;
-  padding: 14px 18px;
-  border: 1px solid #dfe6f5;
+/* Header */
+.db-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 6px rgba(13, 27, 62, 0.04);
+  align-items: flex-end;
+  margin-bottom: 40px;
 }
 
-.trip-info {
+.db-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.db-header p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-top: 4px;
+}
+
+.current-date {
+  background: white;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  color: var(--primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--card-shadow);
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: white;
+  padding: 24px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   gap: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s;
 }
 
-.trip-time {
-  font-size: 16px;
-  font-weight: 700;
-  color: #081638;
-  background: #f0f4ff;
-  padding: 6px 12px;
-  border-radius: 8px;
+.stat-card:hover {
+  transform: translateY(-4px);
 }
 
-.trip-details {
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
   display: flex;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
 }
 
-.badge {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  text-transform: capitalize;
-  font-weight: 600;
+.blue-bg { background: #eff6ff; border: 1px solid #dbeafe; }
+.yellow-bg { background: #fffbeb; border: 1px solid #fef3c7; }
+.red-bg { background: #fef2f2; border: 1px solid #fee2e2; }
+
+.stat-label { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
+.stat-value { font-size: 1.8rem; font-weight: 800; color: var(--text-main); display: block; }
+
+/* Main Layout Grid */
+.main-db-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 40px;
+  align-items: start;
 }
 
-.badge-day { background: #eef2ff; color: #4338ca; }
-.badge-season { background: #fff7ed; color: #c2410c; }
+/* Form Cards */
+.admin-card, .add-trip-card {
+  background: white;
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 24px;
+}
 
-.btn-delete {
-  background: none;
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+.status-dot { width: 10px; height: 10px; border-radius: 50%; }
+.yellow { background: var(--warning); box-shadow: 0 0 0 4px #fef3c7; }
+.blue { background: var(--primary); box-shadow: 0 0 0 4px #dbeafe; }
+
+/* Form Elements */
+.inline-form { display: flex; gap: 12px; }
+
+input, select {
+  width: 100%;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+input:focus, select:focus {
+  outline: none;
+  background: white;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(47, 100, 255, 0.1);
+}
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); padding-left: 4px; }
+.full-width { grid-column: span 2; }
+
+/* Buttons */
+.btn-primary, .btn-save {
+  background: var(--primary);
+  color: white;
+  padding: 12px 24px;
   border: none;
-  color: #9ca3af;
+  border-radius: 12px;
+  font-weight: 700;
   cursor: pointer;
-  font-size: 18px;
-  transition: 0.2s;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(47, 100, 255, 0.3);
 }
 
-.btn-delete:hover {
-  color: #ef4444;
+.btn-primary:hover, .btn-save:hover {
+  background: #1e50e6;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(47, 100, 255, 0.4);
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .trip-info {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .trip-details {
-    flex-direction: column;
-    gap: 4px;
-  }
+.btn-primary:disabled, .btn-save:disabled {
+  background: #cbd5e1;
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
-.empty-state {
-  padding: 16px;
-  color: #8a94a8;
-  font-style: italic;
+/* Slider Customization */
+.slider-container { margin-top: 10px; }
+input[type=range] {
+  accent-color: var(--primary);
+  height: 6px;
+}
+
+/* List Column */
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 24px;
+}
+
+.trips-scroll-area {
+  max-height: 800px;
+  overflow-y: auto;
+  padding-right: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trips-scroll-area::-webkit-scrollbar { width: 6px; }
+.trips-scroll-area::-webkit-scrollbar-track { background: transparent; }
+.trips-scroll-area::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+
+/* Feedback Messages */
+.feedback-message {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.feedback-message.error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .main-db-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
 }

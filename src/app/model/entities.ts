@@ -25,4 +25,14 @@ export interface Trip {
   date: string; // Aggiunta della proprietà date
   trafficMultiplier: number;
 }
+
+export interface PortalUser {
+  id?: number;
+  firstName: string;
+  lastName: string;
+  username: string;
+  dob?: string;
+  email: string;
+  role: string;
+}
  

@@ -1,38 +1,34 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { BusLine } from '../bus-line/bus-line';
-import { AuthService } from '../auth-service';
+import { PortalUserService } from '../portal-user-service';
 
 
 interface MenuItem {
   label: string;
   icon: string;
   route: string;
-  exact?: boolean;
-  adminOnly?: boolean; // <-- Nuova proprietà per il controllo accessi
+  requiresAuth?: boolean;
 }
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterLink, RouterLinkActive, CommonModule],
+  imports: [RouterLink, CommonModule],
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
 export class Menu {
 
-  // Iniettiamo il servizio per leggere il ruolo dell'utente
-  constructor(public authService: AuthService) {}
+  portalUserService = inject(PortalUserService);
 
-  menuItems: MenuItem[] = [
-    { label: 'Home', route: '/', icon: '🏠', exact: true },
+   menuItems: MenuItem[] = [
+    { label: 'Home', route: '/', icon: '🏠'},
 
-    { label: 'Linee',    icon: '🚌', route: 'lines'    },
+    { label: 'Dashboard',    icon: '📊', route: 'trips', requiresAuth: true },
 
-    // Impostiamo 'Nuova corsa' come visibile solo agli admin
-    { label: 'Nuova corsa', icon: '➕', route: 'trips', adminOnly: true },
 
-    { label: 'Cerca corse', icon: '🔍', route: 'Findtrips' },
+    { label: 'FindTrip', icon: '🔍', route: 'Findtrips' },
   ];
 
 }

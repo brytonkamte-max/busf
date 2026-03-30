@@ -28,14 +28,17 @@ export class TripComponent implements OnInit {
 
   newLineName: string = '';
 
- newTrip = {
-  start: '',
-  daytype: 'FERIALE', // Era FERIAL, ora è FERIALE
-  season: 'SUMMER',  // Verifica se il backend vuole WINTER o INVERNO
-  line: null as Line | null,
-  date: '' // Aggiunta data se necessaria
- 
-};
+
+  newTrip = {
+    start: '',
+    daytype: 'FERIALE',
+    season: 'SUMMER',
+    line: null as Line | null,
+    date: '',
+    trafficMultiplier: 0
+  };
+
+  
 
   ngOnInit(): void {
     this.loadData();
@@ -80,6 +83,7 @@ export class TripComponent implements OnInit {
     dayType: this.newTrip.daytype, // Invia al backend (CamelCase)
     season: this.newTrip.season,
     lineId: selectedLine.id ,
+    trafficMultiplier: this.newTrip.trafficMultiplier,
 
     // Trasforma la data in stringa 'YYYY-MM-DD'
   date: new Date(this.newTrip.date).toISOString().split('T')[0]
@@ -106,24 +110,36 @@ export class TripComponent implements OnInit {
   });
 }
 
+today = new Date();
+
+get delayedTripsCount(): number {
+  // Conta quanti trip hanno un moltiplicatore di traffico > 0
+  return this.trips().filter(t => t.trafficMultiplier > 0).length;
+}
+
+lineMessage: string | null = null;
+isError: boolean = false;
+
 addLine(): void {
-    this.errorMessage = null;
-  this.successMessage2 = null;
-  // Se il nome è vuoto, non fare nulla
   if (!this.newLineName.trim()) return;
 
   this.lineService.createLine(this.newLineName).subscribe({
-    next: () => {
-      // 1. Pulisce il campo input
-      this.newLineName = ''; 
-      // 2. Messaggio di successo
-      this.successMessage2 = "Linea creata con successo!";
-      // 3. RICARICA i dati per aggiornare la tendina (select)
-      this.loadData();
+    next: (savedLine) => {
+      // Aggiorna la lista locale per vederla subito nella select
+      this.lines.update(current => [...current, savedLine]);
+      
+      // Imposta il messaggio di successo
+      this.lineMessage = `Linea "${this.newLineName}" creata con successo!`;
+      this.isError = false;
+      this.newLineName = ''; // Pulisce l'input
+
+      // Scompare dopo 3 secondi
+      setTimeout(() => this.lineMessage = null, 3000);
     },
     error: (err) => {
-      console.error("Errore creazione linea:", err);
-      this.errorMessage = "Impossibile creare la linea";
+      this.lineMessage = "Errore durante la creazione della linea.";
+      this.isError = true;
+      setTimeout(() => this.lineMessage = null, 5000);
     }
   });
 }
@@ -140,7 +156,8 @@ removeLocally(id: number): void {
     daytype: 'FERIALE', 
     season: 'SUMMER', 
     line: null ,
-    date: '' // Aggiunta data se necessaria
+    date: '', // Aggiunta data se necessaria
+    trafficMultiplier: 0
   };
 }
 }

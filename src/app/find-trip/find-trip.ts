@@ -62,40 +62,12 @@ private tripService = inject(BusTripService);
       this.filteredTrips.set(lastFour);
       this.hasSearched.set(true);
 
-      // Applica subito il traffico attuale ai risultati trovati
-      if (this.trafficMultiplier > 0){
-        this.applyTrafficToAll(lastFour)
-      }
+     
     });
   }
 
-  // Chiama quando lo slider cambia
-  onTraffiChange(){
-    const current = this.filteredTrips();
-    if (current.length === 0 ) return;
-    this.applyTrafficToAll(current);
-  }
 
-  private applyTrafficToAll(trips: Trip[]){
-    trips.forEach(trip => {
-      this.tripService.updateTrip(trip.id, {
-        start: trip.start,
-        deyType: trip.dayType,
-        season: trip.season,
-        date: trip.date,
-        lineId: trip.line?.id,
-        trafficMultiplier: this.trafficMultiplier
-      }).subscribe({
-        next: (updated) => {
-          // Aggiorna il trip modificato nel sagnale
-          this.filteredTrips.update(list =>
-            list.map(t => t.id === updated.id ? {...t, stops: updated.stops}: t )
-          );
-        },
-        error: (err) => console.error('Errore aggiornamento traffico' , err)
-      });
-    });
-  }
+
   
 
 ngOnInit() {
