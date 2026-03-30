@@ -25,7 +25,7 @@ export class Menu {
    menuItems: MenuItem[] = [
     { label: 'Home', route: '/', icon: '🏠'},
 
-    { label: 'Dashboard',    icon: '📊', route: 'trips'    },
+    { label: 'Dashboard',    icon: '📊', route: 'trips', requiresAuth: true },
   
     
     { label: 'FindTrip', icon: '🔍', route: 'Findtrips' },
