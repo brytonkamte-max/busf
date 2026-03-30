@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BusLine } from '../bus-line/bus-line';
 
 
@@ -8,18 +8,19 @@ interface MenuItem {
   label: string;
   icon: string;
   route: string;
+  exact?: boolean;
 }
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterLink,CommonModule],
+  imports: [RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
 export class Menu {
 
    menuItems: MenuItem[] = [
-    { label: 'Lines',    icon: '🚌', route: 'lines'    },
+    { label: 'Home', route: '/', icon: '🏠', exact: true },
 
     { label: 'Dashboard',    icon: '📊', route: 'trips'    },
   
