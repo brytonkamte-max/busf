@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BusLineService } from '../bus-line-service'; // Import corretto
 import { Line } from '../model/entities';
+import { AuthService } from '../auth-service';
 
 @Component({
   selector: 'app-home-page',
@@ -18,7 +19,8 @@ export class HomePage implements OnInit {
 
   constructor(
     private busLineService: BusLineService, // CamelCase per l'istanza
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public authService: AuthService
   ) {}
 
   ngOnInit() {

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BusLine } from '../bus-line/bus-line';
+import { AuthService } from '../auth-service';
 
 
 interface MenuItem {
@@ -9,6 +10,7 @@ interface MenuItem {
   icon: string;
   route: string;
   exact?: boolean;
+  adminOnly?: boolean; // <-- Nuova proprietà per il controllo accessi
 }
 
 @Component({
@@ -19,12 +21,16 @@ interface MenuItem {
 })
 export class Menu {
 
-   menuItems: MenuItem[] = [
+  // Iniettiamo il servizio per leggere il ruolo dell'utente
+  constructor(public authService: AuthService) {}
+
+  menuItems: MenuItem[] = [
     { label: 'Home', route: '/', icon: '🏠', exact: true },
 
     { label: 'Linee',    icon: '🚌', route: 'lines'    },
 
-    { label: 'Nuova corsa',    icon: '➕', route: 'trips'    },
+    // Impostiamo 'Nuova corsa' come visibile solo agli admin
+    { label: 'Nuova corsa', icon: '➕', route: 'trips', adminOnly: true },
 
     { label: 'Cerca corse', icon: '🔍', route: 'Findtrips' },
   ];

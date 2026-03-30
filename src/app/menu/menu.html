@@ -7,15 +7,19 @@
 
   <ul class="menu-list">
     @for (item of menuItems; track item.label) {
-      <li>
-        <a class="menu-item"
-           [routerLink]="item.route"
-           routerLinkActive="active"
-           [routerLinkActiveOptions]="{ exact: item.exact || false }">
-          <span>{{ item.icon }}</span>
-          <span>{{ item.label }}</span>
-        </a>
-      </li>
+
+      @if (!item.adminOnly || authService.isAdmin()) {
+        <li>
+          <a class="menu-item"
+             [routerLink]="item.route"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: item.exact || false }">
+            <span>{{ item.icon }}</span>
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      }
+
     }
   </ul>
 
