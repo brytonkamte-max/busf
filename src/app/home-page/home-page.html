@@ -1,0 +1,54 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="logo-area">
+      <div class="title-text">
+        <h1>Bus Manager <span class="version">v1.0</span></h1>
+        <p>Sistema Gestionale Trasporti</p>
+      </div>
+    </div>
+
+    <p>Benvenuto nel pannello di controllo della linea trasporti.</p>
+  </header>
+
+  <div class="stats-bar">
+
+    <div class="stat-banner">
+      <span class="stat-number">{{ activeLinesCount }}</span>
+      <span class="stat-label">Linee Attive</span>
+    </div>
+
+    <div class="stat-banner">
+      <span class="stat-number">{{ totalStopsCount }}</span>
+      <span class="stat-label">Fermate Totali</span>
+    </div>
+
+    <div class="stat-banner">
+      <span class="stat-number">{{ driversCount }}</span>
+      <span class="stat-label">Autisti in Servizio</span>
+    </div>
+
+  </div>
+
+  <div class="menu-grid">
+    <div class="menu-card" routerLink="/lines">
+      <div class="card-icon">🚌</div>
+      <h3>Gestione Linee</h3>
+      <p>Visualizza, modifica o crea nuove linee e percorsi.</p>
+      <button class="btn-go">Entra →</button>
+    </div>
+
+    <div class="menu-card" routerLink="/trips">
+      <div class="card-icon">➕</div>
+      <h3>Nuova Corsa</h3>
+      <p>Aggiungi una nuova corsa.</p>
+      <button class="btn-go">Entra →</button>
+    </div>
+
+    <div class="menu-card danger" routerLink="/Findtrips">
+      <div class="card-icon">🔍</div>
+      <h3>Cerca Corse</h3>
+      <p>Cerca le corse più recenti.</p>
+      <button class="btn-go">Entra →</button>
+    </div>
+  </div>
+</div>

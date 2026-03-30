@@ -29,4 +29,8 @@ export class BusTripService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
   
+  updateTrip(id: number, trip: any): Observable<Trip> {
+    return this.http.put<Trip>(`${this.apiUrl}/${id}`, trip);
+  }
+
 }

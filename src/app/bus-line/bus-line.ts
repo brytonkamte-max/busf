@@ -13,21 +13,18 @@ import { Router } from '@angular/router';
   styleUrl: './bus-line.css',
 })
 export class BusLine implements OnInit {
- lines = signal<Line[]>([]);
+  lines = signal<Line[]>([]);
   newLineName = '';
   search = '';
-
 
   constructor(
     private busLineService: BusLineService,
     private router: Router
   ) {}
 
-
   ngOnInit(): void {
     this.loadLines();
   }
-
 
   loadLines(): void {
     this.busLineService.getLines().subscribe((lines) => {
@@ -35,11 +32,9 @@ export class BusLine implements OnInit {
     });
   }
 
-
   openLine(line: Line): void {
     this.router.navigate(['/lines', line.id]);
   }
-
 
   addLine(): void {
     if (!this.newLineName.trim()) return;
@@ -51,18 +46,35 @@ export class BusLine implements OnInit {
     });
   }
 
+  searchLines(): void {
+    if (!this.search.trim()) {
+      this.loadLines();
+      return;
+    }
 
-
-searchLines(): void {
-  if (!this.search.trim()) {
-    this.loadLines();
-    return;
+    this.busLineService.searchLines(this.search).subscribe((lines) => {
+      this.lines.set(lines);
+    });
   }
 
-
-  this.busLineService.searchLines(this.search).subscribe((lines) => {
-    this.lines.set(lines);
-  });
-}
+  deleteLine(id: number): void {
+    if (confirm('Sei sicuro di voler eliminare questa linea e tutte le sue fermate?')) {
+      this.busLineService.deleteLine(id).subscribe({
+        next: () => {
+          // Aggiorniamo il signal delle linee rimuovendo quella eliminata
+          this.lines.update(currentLines => currentLines.filter(l => l.id !== id));
+          // Se hai dei messaggi di successo:
+          // this.successMessage = 'Linea eliminata correttamente';
+        },
+        error: (err) => {
+          console.error(err);
+          // Gestione errore 403 se non hai aggiornato SecurityConfig
+          if(err.status === 403) {
+            alert("Non hai i permessi per eliminare linee.");
+          }
+        }
+      });
+    }
+  }
 }
 

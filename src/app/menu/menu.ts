@@ -14,7 +14,7 @@ interface MenuItem {
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterLink,CommonModule],
+  imports: [RouterLink, CommonModule],
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
@@ -23,7 +23,7 @@ export class Menu {
   portalUserService = inject(PortalUserService);
   
    menuItems: MenuItem[] = [
-    { label: 'Lines',    icon: '🚌', route: 'lines'    },
+    { label: 'Home', route: '/', icon: '🏠'},
 
     { label: 'Trip',    icon: '✈️', route: 'trips', requiresAuth: true },
   

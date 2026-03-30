@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BusTripService } from '../bus-trip-service';
 import { Trip } from '../model/entities';
 import { TripList } from '../trip-list/trip-list';
+import { last } from 'rxjs';
 
 @Component({
   selector: 'app-find-trip',
@@ -20,12 +21,22 @@ private tripService = inject(BusTripService);
   // Inizializziamo con valori vuoti o stringhe
   searchTime = ''; 
   searchDate = '';
+  // Moltiplicatore traffico (0 = nessun traffico, 1 = 100%)
+  trafficMultiplier = 0;
 
   // Creiamo un segnale interno per gestire la lista dei risultati
   filteredTrips = signal<Trip[]>([]);
   // Per gestire lo stato "nessun risultato trovato"
   hasSearched = signal(false);
   availableCities = signal<string[]>([]);
+
+  // Etichetta leggibile per lo slide
+  get trafficLabel(): string {
+  if (this.trafficMultiplier === 0) return 'Nessun traffico';
+  if (this.trafficMultiplier <= 0.3) return 'traffico lieve';
+  if (this.trafficMultiplier <= 0.6) return 'traffico medio';
+  return 'Traffico intenso';
+}
 
  find() {
     this.tripService.getTrips().subscribe(allTrips => {
@@ -48,12 +59,43 @@ private tripService = inject(BusTripService);
 
       // Prendiamo solo le ultime 4 (come indicato nel tuo header)
       const lastFour = filtered.slice(-4);
-
       this.filteredTrips.set(lastFour);
       this.hasSearched.set(true);
+
+      // Applica subito il traffico attuale ai risultati trovati
+      if (this.trafficMultiplier > 0){
+        this.applyTrafficToAll(lastFour)
+      }
     });
   }
 
+  // Chiama quando lo slider cambia
+  onTraffiChange(){
+    const current = this.filteredTrips();
+    if (current.length === 0 ) return;
+    this.applyTrafficToAll(current);
+  }
+
+  private applyTrafficToAll(trips: Trip[]){
+    trips.forEach(trip => {
+      this.tripService.updateTrip(trip.id, {
+        start: trip.start,
+        deyType: trip.dayType,
+        season: trip.season,
+        date: trip.date,
+        lineId: trip.line?.id,
+        trafficMultiplier: this.trafficMultiplier
+      }).subscribe({
+        next: (updated) => {
+          // Aggiorna il trip modificato nel sagnale
+          this.filteredTrips.update(list =>
+            list.map(t => t.id === updated.id ? {...t, stops: updated.stops}: t )
+          );
+        },
+        error: (err) => console.error('Errore aggiornamento traffico' , err)
+      });
+    });
+  }
   
 
 ngOnInit() {
@@ -72,5 +114,6 @@ ngOnInit() {
     this.availableCities.set(Array.from(cities).sort());
   });
 }
+
 
 }

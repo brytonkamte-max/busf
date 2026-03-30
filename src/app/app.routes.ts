@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { BusLine } from './bus-line/bus-line';
-
+import { HomePage } from './home-page/home-page';
 
 import { LineDetail } from './line-detail/line-detail';
 import { TripComponent } from './trip-component/trip-component';
@@ -12,7 +12,7 @@ import { authGuard } from './guards/authGuards';
 
 export const routes: Routes = [
 
-  { path: '', redirectTo: 'Findtrips', pathMatch: 'full' },
+  { path: '', component: HomePage },
 
   { path: 'authentication', component: Authentication },
 

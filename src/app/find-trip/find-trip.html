@@ -2,27 +2,27 @@
   <div class="add-trip-card">
     <div class="card-header">
       <div class="line-dot"></div>
-      <span>Cerca Corse(Ultime 4 corse)</span>
+      <span>Cerca corse (ultime 4)</span>
     </div>
 
     <div class="form-grid">
      <div class="field">
   <label>Città di Partenza</label>
-  <input 
-    type="text" 
-    [(ngModel)]="searchPartenza" 
-    list="city-list" 
-    placeholder="Seleziona o scrivi..." 
+  <input
+    type="text"
+    [(ngModel)]="searchPartenza"
+    list="city-list"
+    placeholder="Seleziona o scrivi..."
   />
 </div>
 
 <div class="field">
   <label>Destinazione</label>
-  <input 
-    type="text" 
-    [(ngModel)]="searchDestinazione" 
-    list="city-list" 
-    placeholder="Seleziona o scrivi..." 
+  <input
+    type="text"
+    [(ngModel)]="searchDestinazione"
+    list="city-list"
+    placeholder="Seleziona o scrivi..."
   />
 </div>
 
@@ -43,9 +43,8 @@
     <option [value]="city"></option>
   }
 </datalist>
-      
       <button class="btn-add" (click)="find()" [disabled]="!searchPartenza || !searchDestinazione">
-        Find
+        Cerca
       </button>
     </div>
   </div>

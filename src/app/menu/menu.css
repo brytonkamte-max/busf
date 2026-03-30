@@ -26,11 +26,11 @@
 }
 
 .menu-logo span {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 20px; /* Leggermente più grande per visibilità */
+  font-weight: 800;
   color: #ffffff;
   font-family: sans-serif;
-  letter-spacing: 0.3px;
+  letter-spacing: -0.5px; /* Rende il font più moderno e compatto */
 }
 
 .menu-list {
@@ -39,7 +39,6 @@
   justify-content: flex-end;
   gap: 2px;
   list-style: none;
-  padding: 0;
   margin: 0;
   flex-wrap: wrap;
 }
@@ -106,3 +105,15 @@
     height: 75px;
   }
 }
+.menu-logo span {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff; /* Testo bianco come nel tuo screenshot */
+  font-family: sans-serif;
+}
+
+.menu-logo:hover {
+  opacity: 0.9;
+}
+
+.logo-text strong { color: #1a56db; }
