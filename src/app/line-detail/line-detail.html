@@ -1,72 +1,148 @@
 <div class="page">
   @if (line(); as currentLine) {
-    <button class="btn-back" (click)="goBack()">← Torna indietro</button>
+
+    <header class="page-header">
+      <button class="btn-back" (click)="goBack()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span>Lines</span>
+      </button>
+
+      <div class="line-badge">
+        <span class="line-badge-label">LINE</span>
+        <span class="line-badge-number">{{ currentLine.name }}</span>
+      </div>
+
+      <div class="header-stat">
+        <span class="stat-value">{{ stops().length }}</span>
+        <span class="stat-label">stops</span>
+      </div>
+    </header>
 
     <div class="content-wrapper">
-      <div class="line-card">
-        <div class="line-header">
-          <span class="line-dot"></span>
-          <span>LINEA {{ currentLine.name }}</span>
-        </div>
 
+      <!-- STOPS TIMELINE -->
+      <section class="timeline-section">
         <ul class="stop-list">
-          @for (stop of stops(); track stop.id; let i = $index) {
-            <li class="stop-item">
+          @for (stop of stops(); track stop.id; let i = $index; let last = $last) {
+            <li class="stop-item" [class.last]="last">
+
               <div class="stop-track">
-                <div class="stop-circle">{{ stop.position }}</div>
-                @if (i < stops().length - 1) {
-                  <div class="stop-line"></div>
+                <div class="stop-node">{{ stop.position }}</div>
+                @if (!last) {
+                  <div class="stop-connector"></div>
                 }
               </div>
 
-              <div class="stop-info">
-                <div class="stop-city">{{ stop.city }}</div>
-                <div class="stop-address">{{ stop.address }}</div>
-                <a href="https://www.google.it/maps/search/{{ stop.address }}+{{ stop.city }}" target="_blank">Vedi</a>
+              <div class="stop-card">
+                <div class="stop-main">
+                  <div class="stop-city">{{ stop.city }}</div>
+                  <div class="stop-address">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    {{ stop.address }}
+                  </div>
+                </div>
+
+                <div class="stop-meta">
+                  @if (stop.time !== null) {
+                    <span class="stop-time">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                      </svg>
+                      {{ stop.time }} min
+                    </span>
+                  }
+
+                  <a class="btn-map"
+                     href="https://www.google.it/maps/search/{{ stop.address }}+{{ stop.city }}"
+                     target="_blank"
+                     title="Apri in Google Maps">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+                    </svg>
+                  </a>
+
+                  <button class="btn-delete" (click)="deleteStop(stop.id)" title="Rimuovi stop">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
 
-              @if (stop.time !== null) {
-                <span class="stop-time">{{ stop.time }} min</span>
-              }
-
-              <button class="btn-delete" (click)="deleteStop(stop.id)">✕</button>
             </li>
           } @empty {
-            <li class="empty">Non ci sono fermate da visualizzare.</li>
+            <li class="stop-empty">
+              <div class="empty-icon">🚏</div>
+              <p>Nessuna fermata ancora.</p>
+            </li>
           }
         </ul>
+      </section>
 
-        <div class="add-stop">
-          <div class="add-stop-title">Aggiungi una fermata</div>
-          <div class="add-stop-row">
-
-            <select [(ngModel)]="newStop.position" class="input-pos">
-              <option [ngValue]="null" disabled selected>Pos.</option>
-              @for (pos of availablePositions(); track pos) {
-                <option [ngValue]="pos">
-                  {{ pos === stops().length + 1 ? pos + ' (Coda)' : pos }}
-                </option>
-              }
-            </select>
-
-            <input [(ngModel)]="newStop.city" type="text" placeholder="Città" />
-            <input [(ngModel)]="newStop.address" type="text" placeholder="Indirizzo" />
-            <input [(ngModel)]="newStop.time" type="number" placeholder="Min" min="1" class="input-minutes" style="width: 70px;" />
-
-            <button
-              (click)="addStop()"
-              [disabled]="!newStop.position || !newStop.city || !newStop.address"
-            >
-              Aggiungi
-            </button>
+      <!-- ADD STOP FORM -->
+      <section class="add-section">
+        <div class="add-card">
+          <div class="add-card-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+            Aggiungi Fermata
           </div>
-        </div>
-      </div>
 
+          <div class="add-fields">
+            <div class="field-group field-sm">
+              <label>Pos.</label>
+              <input [(ngModel)]="newStop.position" type="number" placeholder="1" />
+            </div>
+            <div class="field-group field-lg">
+              <label>Città</label>
+              <input [(ngModel)]="newStop.city" type="text" placeholder="Milano" />
+            </div>
+            <div class="field-group field-xl">
+              <label>Indirizzo</label>
+              <input [(ngModel)]="newStop.address" type="text" placeholder="Via Roma, 1" />
+            </div>
+            <div class="field-group field-sm">
+              <label>Min</label>
+              <input [(ngModel)]="newStop.time" type="number" placeholder="—" />
+            </div>
+          </div>
+
+          <button
+            class="btn-add"
+            (click)="addStop()"
+            [disabled]="!newStop.position || !newStop.city || !newStop.address"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Aggiungi
+          </button>
+        </div>
+
+        @if (successMessage) {
+          <div class="toast toast-success">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            {{ successMessage }}
+          </div>
+        }
+
+        @if (errorMessage) {
+          <div class="toast toast-error">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            {{ errorMessage }}
+          </div>
+        }
+      </section>
 
     </div>
   }
-
-  @if (successMessage) { <p class="success">{{ successMessage }}</p> }
-  @if (errorMessage) { <p class="error">{{ errorMessage }}</p> }
 </div>

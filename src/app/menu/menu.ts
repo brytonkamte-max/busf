@@ -22,11 +22,10 @@ export class Menu {
    menuItems: MenuItem[] = [
     { label: 'Home', route: '/', icon: '🏠', exact: true },
 
-    { label: 'Linee',    icon: '🚌', route: 'lines'    },
-
-    { label: 'Nuova corsa',    icon: '➕', route: 'trips'    },
-
-    { label: 'Cerca corse', icon: '🔍', route: 'Findtrips' },
+    { label: 'Dashboard',    icon: '📊', route: 'trips'    },
+  
+    
+    { label: 'FindTrip', icon: '🔍', route: 'Findtrips' },
   ];
 
 }

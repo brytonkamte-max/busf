@@ -1,40 +1,62 @@
-<div class="page">
-
-  <div class="controls-wrapper">
-    <div class="control-row">
-      <input [(ngModel)]="newLineName" type="text" placeholder="Nuova linea (es: z228, 423...)" />
-      <button class="btn-main" (click)="addLine()" [disabled]="!newLineName.trim()">Aggiungi</button>
+<div class="user-container">
+  <header class="user-header">
+    <div class="title-section">
+      <h1>Linee Bus</h1>
+      <p>Trova la tua direzione e pianifica il viaggio</p>
     </div>
-
-    <div class="control-row">
-      <input [(ngModel)]="search" type="text" placeholder="Cerca linea o indirizzo..." />
-      <button class="btn-main" (click)="searchLines()">Cerca</button>
+    
+    <div class="search-box">
+      <div class="input-wrapper">
+        <i class="search-icon">🔍</i>
+        <input
+          [(ngModel)]="search"
+          type="text"
+          placeholder="Cerca linea o città..."
+          (keyup.enter)="searchLines()"
+        />
+      </div>
+      <button class="btn-search" (click)="searchLines()">Cerca</button>
     </div>
-  </div>
+  </header>
 
-  <div class="lines-container">
+  <div class="lines-grid">
     @for (line of lines(); track line.id) {
       <div class="line-card" (click)="openLine(line)">
-        <div class="line-header">
-          <span class="line-dot"></span>
-          <span>LINEA {{ line.name }}</span>
-        </div>
-
-        <div class="line-content">
-          <div class="line-preview">
-            <span>{{ line.stops?.length ?? 0 }} fermate</span>
+        <div class="card-accent"></div>
+        
+        <div class="card-content">
+          <div class="line-identity">
+            <span class="line-number">{{ line.name }}</span>
+            <span class="line-label">LINEA</span>
           </div>
 
-          <button class="btn-delete-line" (click)="deleteLine(line.id); $event.stopPropagation()">
-            <i class="fas fa-trash"></i> Elimina
-          </button>
+          <div class="line-route">
+            <div class="route-point">
+              <span class="dot"></span>
+              <span class="city">{{ getFirstCity(line) }}</span>
+            </div>
+            <div class="route-line"></div>
+            <div class="route-point">
+              <span class="dot outline"></span>
+              <span class="city">{{ getLastCity(line) }}</span>
+            </div>
+          </div>
+
+          <div class="line-footer">
+            <span class="stops-count">
+              <i>🚏</i> {{ line.stops?.length ?? 0 }} fermate
+            </span>
+            <span class="view-details">Vedi orari →</span>
+          </div>
         </div>
       </div>
     } @empty {
-      <div class="empty">
-        Non ci sono linee da visualizzare.
+      <div class="empty-state">
+        <div class="empty-icon">🚌</div>
+        <h3>Nessuna linea trovata</h3>
+        <p>Prova a cambiare i termini della ricerca.</p>
+        <button (click)="loadLines()" class="btn-reset">Mostra tutte le linee</button>
       </div>
     }
   </div>
-
 </div>

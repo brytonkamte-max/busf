@@ -1,159 +1,163 @@
-.page {
-  max-width: 900px;
+.user-container {
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
-  background: #f5f7fb;
-  min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 40px 20px;
+  background: #fdfdfd;
 }
 
-/* --- NUOVO LAYOUT CONTROLLI --- */
-.controls-wrapper {
+/* Header & Search */
+.user-header { margin-bottom: 40px; }
+.user-header h1 { font-size: 2.5rem; color: #0f172a; margin: 0; font-weight: 800; }
+.user-header p { color: #64748b; margin-top: 8px; font-size: 1.1rem; }
+
+.search-box {
+  margin-top: 30px;
   display: flex;
-  flex-direction: column;
   gap: 12px;
-  margin-bottom: 30px;
-  background: white;
-  padding: 20px;
-  border-radius: 18px;
-  box-shadow: 0 4px 12px rgba(13, 27, 62, 0.05);
+  max-width: 600px;
 }
 
-.control-row {
-  display: flex;
-  gap: 10px;
+.input-wrapper {
+  position: relative;
+  flex: 1;
 }
 
-.control-row input {
-  flex: 1; /* L'input prende tutto lo spazio disponibile, allineando le due barre */
-  padding: 12px 15px;
-  border: 1px solid #d9dfeb;
-  border-radius: 10px;
+.input-wrapper input {
+  width: 100%;
+  padding: 14px 14px 14px 45px;
+  border-radius: 16px;
+  border: 2px solid #e2e8f0;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.input-wrapper input:focus {
+  border-color: #2563eb;
   outline: none;
-  font-size: 14px;
-  transition: border-color 0.2s;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
-.control-row input:focus {
-  border-color: #2f64ff;
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.5;
 }
 
-.btn-main {
-  min-width: 100px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  background: #2f64ff;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn-main:disabled {
-  background: #a5b4fc;
-  cursor: not-allowed;
-}
-
-/* --- CARD --- */
-.lines-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+/* Line Cards */
+.lines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
 }
 
 .line-card {
   background: white;
-  border-radius: 18px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 6px 18px rgba(13, 27, 62, 0.08);
-  border: 1px solid #dfe6f5;
+  display: flex;
   cursor: pointer;
-  transition: 0.2s;
-  position: relative; /* Necessario per il posizionamento del tasto Elimina */
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .line-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 22px rgba(13, 27, 62, 0.12);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+  border-color: #2563eb;
 }
 
-.line-header {
-  background: #081638;
-  color: white;
-  padding: 14px 18px;
-  font-size: 18px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.card-accent {
+  width: 8px;
+  background: #2563eb;
 }
 
-.line-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #2f64ff;
-}
-
-.line-content {
-  padding: 20px 18px 50px 18px; /* Padding extra sotto per non sovrapporsi al tasto */
-}
-
-.line-preview {
-  color: #6b7280;
-  font-size: 15px;
-}
-
-/* --- TASTO ELIMINA (SISTEMATO) --- */
-.btn-delete-line {
-  position: absolute; /* Si aggancia alla card */
-  bottom: 15px;       /* Distanza dal bordo inferiore */
-  right: 18px;        /* Distanza dal bordo destro */
-
-  background: white;
-  border: 1px solid #ff4d4f;
-  color: #ff4d4f;
-  padding: 6px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.btn-delete-line:hover {
-  background: #ff4d4f;
-  color: white;
-}
-
-.empty {
-  padding: 30px;
-  text-align: center;
-  color: #8a94a8;
-  font-style: italic;
-}
-
-.search-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.search-bar input {
+.card-content {
+  padding: 24px;
   flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #d9dfeb;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.search-bar button {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 10px;
-  background: #2f64ff;
-  color: white;
-  cursor: pointer;
+.line-identity {
+  display: flex;
+  flex-direction: column;
+}
+
+.line-number {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #1e293b;
+  line-height: 1;
+}
+
+.line-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+
+/* Route Visual */
+.line-route {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+}
+
+.route-point {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: #2563eb;
+  border-radius: 50%;
+}
+
+.dot.outline {
+  background: white;
+  border: 2px solid #2563eb;
+}
+
+.city {
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+.route-line {
+  width: 2px;
+  height: 15px;
+  background: #e2e8f0;
+  margin-left: 4px;
+}
+
+/* Footer */
+.line-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.stops-count {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.view-details {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2563eb;
 }
