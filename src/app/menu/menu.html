@@ -1,18 +1,36 @@
 <nav class="menu">
-  
   <div class="menu-logo">
-    <img src="logo.png" width="32" height="32" alt="logo" />
+    <img src="Logoo.png" width="32" height="32" alt="logo" />
   </div>
 
   <ul class="menu-list">
     @for (item of menuItems; track item.label) {
+      @if (!item.requiresAuth || portalUserService.isLogged()) {
+        <li>
+          <a class="menu-item" [routerLink]="item.route" routerLinkActive="active">
+            <span>{{ item.icon }}</span>
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    }
+
+    @if (!portalUserService.isLogged()) {
       <li>
-        <a class="menu-item" [routerLink]="item.route" routerLinkActive="active">
-          <span>{{ item.icon }}</span>
-          <span>{{ item.label }}</span>
+        <a class="menu-item" routerLink="/authentication" routerLinkActive="active">
+          <span>🔐</span>
+          <span>Login</span>
         </a>
       </li>
     }
-  </ul>
 
+    @if (portalUserService.isLogged()) {
+      <li>
+        <button class="menu-item logout-btn" type="button" (click)="portalUserService.doLogout()">
+          <span>🚪</span>
+          <span>Logout</span>
+        </button>
+      </li>
+    }
+  </ul>
 </nav>

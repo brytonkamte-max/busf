@@ -24,4 +24,14 @@ export interface Trip {
   line?: any;
   date: string; // Aggiunta della proprietà date
 }
+
+export interface PortalUser {
+  id?: number;
+  firstName: string;
+  lastName: string;
+  username: string;
+  dob?: string;
+  email: string;
+  role: string;
+}
  
