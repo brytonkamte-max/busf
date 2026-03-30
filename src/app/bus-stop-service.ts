@@ -9,8 +9,8 @@ import { HttpClient } from '@angular/common/http';
 export class BusStopService {
 
 
- // private apiLinesUrl = 'http://localhost:8080/api/lines';
-  private apiStopsUrl = 'http://localhost:8080/api/stops';
+ // private apiLinesUrl = 'http://192.168.0.100:8080/api/lines';
+  private apiStopsUrl = 'http://192.168.0.100:8080/api/stops';
 
   constructor(private http: HttpClient) {}
 

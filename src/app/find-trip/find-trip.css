@@ -1,222 +1,211 @@
-/* Container principale */
-.find-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+:host {
+  --primary: #00A651; /* Verde Brianza Bus */
+  --secondary: #003366; /* Blu Scuro Brianza Bus */
+  --white: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-light: #666666;
+  --bg-soft: #f8f9fa;
+  
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-/* Card per il Form di Ricerca */
-.add-trip-card {
-  background: white;
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(13, 27, 62, 0.1);
-  border: 1px solid #dfe6f5;
-  margin-bottom: 30px;
-}
-
-/* Header della card (stile Dark come le linee) */
-.card-header {
-  background: #081638;
-  color: white;
-  padding: 16px 20px;
-  font-size: 18px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.line-dot {
-  width: 12px;
-  height: 12px;
-  background-color: #2f64ff;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #2f64ff;
-}
-
-/* Griglia per gli input */
-.form-grid {
-  padding: 24px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  align-items: flex-end;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.field label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #4b5563;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Input stile moderno */
-.form-grid input {
-  padding: 12px 14px;
-  border: 1px solid #d9dfeb;
-  border-radius: 10px;
-  background: #f9fafb;
-  outline: none;
-  font-size: 14px;
-  color: #1f2937;
-  transition: all 0.2s ease;
-}
-
-.form-grid input:focus {
-  border-color: #2f64ff;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(47, 100, 255, 0.1);
-}
-
-/* Pulsante Find */
-.btn-add {
-  padding: 0 24px;
-  border: none;
-  border-radius: 10px;
-  background: #2f64ff;
-  color: white;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  height: 45px; /* Perfettamente allineato */
+/* ---- HERO SECTION ---- */
+.hero-section {
+  position: relative;
+  min-height: 550px;
+  background-image: url('/bus-brianza.png'); /* Immagine Bus Moderno */
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px 20px;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(0,51,102,0.7) 0%, rgba(0,0,0,0.3) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* ---- SEARCH CARD PREMIUM ---- */
+.search-container-premium {
+  background: var(--white);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.search-header {
+  background: var(--secondary);
+  color: white;
+  padding: 15px 30px;
+  text-align: center;
+}
+
+.search-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
-.btn-add:hover:not(:disabled) {
-  background: #1d4ed8;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(47, 100, 255, 0.3);
+.search-body {
+  padding: 30px;
 }
 
-.btn-add:disabled {
-  background: #cbd5e1;
-  color: #94a3b8;
-  cursor: not-allowed;
-}
-
-/* Sezione Risultati */
-.results-section {
+.form-row {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  animation: fadeIn 0.5s ease-in-out;
+  gap: 20px;
+  align-items: flex-end;
+  margin-bottom: 25px;
 }
 
-/* Messaggio "Nessun risultato" */
-.empty-msg {
-  text-align: center;
-  padding: 40px;
-  background: #f8fafc;
-  border: 2px dashed #cbd5e1;
-  border-radius: 18px;
-  color: #64748b;
-  font-weight: 500;
+.field {
+  flex: 1;
 }
 
-.trip-card {
-  display: flex;
-  background: white;
-  border-radius: 15px;
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #eee;
+.field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+.input-group {
   position: relative;
 }
 
-.is-delayed {
-  border-left: 5px solid #ff4d4d;
-  background: #fffafa;
-}
-
-.time-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-right: 1px solid #eee;
-  padding-right: 15px;
-  min-width: 120px;
-}
-
-.actual-time {
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: #1a1a1a;
-}
-
-.is-delayed .actual-time {
-  color: #ff4d4d;
-}
-
-.scheduled-time {
-  font-size: 0.8rem;
-  text-decoration: line-through;
-  color: #aaa;
-  margin-left: 5px;
-}
-
-.delay-tag {
-  background: #ff4d4d;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 5px;
-  font-size: 0.7rem;
-  font-weight: bold;
-}
-
-/* Animazione per la comparsa dei risultati */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-
-
-/* Rende l'input chiaramente una scelta multipla */
-.form-grid input[list] {
-  cursor: pointer;
-}
-
-/* Opzionale: pulisce l'icona della lista su alcuni browser */
-.form-grid input::-webkit-calendar-picker-indicator {
-  display: block;
-  color: #2f64ff;
+.input-group .icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   opacity: 0.5;
 }
 
-.traffic-field {
-  grid-column: span 2;
+input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.2s;
 }
 
-.traffic-slider-wrap {
+input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(0, 166, 81, 0.1);
+  outline: none;
+}
+
+/* ---- BOTTONI ---- */
+.btn-swap-round {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: 0.3s;
+}
+
+.btn-swap-round:hover {
+  background: var(--bg-soft);
+  transform: rotate(180deg);
+}
+
+.btn-search-hero {
+  width: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, #2ecc71 100%);
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 10px 20px -5px rgba(46, 204, 113, 0.5);
+  transition: 0.3s;
 }
 
-.traffic-slider {
-  flex: 1;
-  accent-color: #2f64ff;
-  height: 6px;
-  cursor: pointer;
+.btn-search-hero:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -5px rgba(46, 204, 113, 0.6);
 }
 
-.traffic-label-badge {
-  font-size: 13px;
+/* ---- GRID INFO INFERIORE ---- */
+.info-grid-section {
+  max-width: 1100px;
+  margin: -50px auto 50px; /* Sale sopra la hero per profondità */
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.info-card {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.info-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.info-card-header h3 {
+  margin: 0;
+  font-size: 16px;
   font-weight: 700;
-  color: #1f2937;
-  white-space: nowrap;
-  min-width: 160px;
+}
+
+.popular-routes {
+  list-style: none;
+  padding: 0;
+}
+
+.popular-routes li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .info-grid-section {
+    grid-template-columns: 1fr;
+    margin-top: 20px;
+  }
+  .form-row {
+    flex-direction: column;
+  }
+  .btn-swap-round {
+    align-self: center;
+    transform: rotate(90deg);
+  }
 }

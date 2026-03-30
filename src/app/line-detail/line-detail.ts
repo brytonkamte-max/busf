@@ -1,10 +1,11 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { Line, Stop} from '../model/entities';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BusLineService } from '../bus-line-service';
 import { BusStopService } from '../bus-stop-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { PortalUserService } from '../portal-user-service';
 
 @Component({
   selector: 'app-line-detail',
@@ -14,11 +15,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './line-detail.css',
 })
 export class LineDetail implements OnInit {
-
-  line = signal<Line | null>(null);
+    line = signal<Line | null>(null);
   stops = signal<Stop[]>([]);
   errorMessage = '';
   successMessage = '';
+
+  portalUserService = inject(PortalUserService);
 
   newStop = {
     position: null as number | null,
@@ -27,7 +29,6 @@ export class LineDetail implements OnInit {
     time: null as number | null,
   };
 
-  // Calcola le opzioni della select basandosi sul numero attuale di fermate
   availablePositions = computed(() => {
     const currentStopsCount = this.stops().length;
     return Array.from({ length: currentStopsCount + 1 }, (_, i) => i + 1);
@@ -49,7 +50,6 @@ export class LineDetail implements OnInit {
     this.busLineService.getLineById(id).subscribe({
       next: (line) => {
         this.line.set(line);
-        // Ordiniamo le fermate per posizione per sicurezza
         const sortedStops = (line.stops ?? []).sort((a, b) => a.position - b.position);
         this.stops.set(sortedStops);
       },
@@ -63,7 +63,6 @@ export class LineDetail implements OnInit {
 
     if (!currentLine || selectedPos === null) return;
 
-    // 1. Validazione
     const isTimeInvalid = this.newStop.time === null || this.newStop.time <= 0;
     const isTextInvalid = !this.newStop.city.trim() || !this.newStop.address.trim();
 
@@ -73,7 +72,6 @@ export class LineDetail implements OnInit {
       return;
     }
 
-    // 2. Chiamata al servizio
     this.busStopService.createStop(currentLine.id, {
       position: selectedPos,
       city: this.newStop.city,
@@ -81,11 +79,7 @@ export class LineDetail implements OnInit {
       time: this.newStop.time!
     }).subscribe({
       next: () => {
-        // Poiché il backend ha fatto lo shift, la cosa più sicura è
-        // ricaricare l'intera linea. Così tutte le posizioni saranno allineate al DB.
         this.loadLine(currentLine.id);
-
-        // Reset del form
         this.newStop = { position: null, city: '', address: '', time: null };
         this.successMessage = 'Fermata inserita con successo!';
         this.errorMessage = '';
@@ -107,7 +101,6 @@ export class LineDetail implements OnInit {
     if (confirm('Sei sicuro di voler eliminare questa fermata?')) {
       this.busStopService.deleteStop(stopId).subscribe({
         next: () => {
-          // Anche qui ricarichiamo per avere le posizioni ricalcolate (senza buchi)
           this.loadLine(currentLine.id);
           this.successMessage = 'Fermata eliminata e lista aggiornata.';
           this.errorMessage = '';

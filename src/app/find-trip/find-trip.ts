@@ -66,7 +66,11 @@ private tripService = inject(BusTripService);
     });
   }
 
-
+  swapCities() {
+    const temp = this.searchPartenza;
+    this.searchPartenza = this.searchDestinazione;
+    this.searchDestinazione = temp;
+  }
 
   
 

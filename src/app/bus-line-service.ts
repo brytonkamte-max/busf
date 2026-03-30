@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 })
 export class BusLineService {
 
- private apiLinesUrl = 'http://localhost:8080/api/lines';
+ private apiLinesUrl = 'http://192.168.0.100:8080/api/lines';
   
  
   constructor(private http: HttpClient) {}
