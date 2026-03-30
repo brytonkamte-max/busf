@@ -147,10 +147,37 @@ input:focus, select:focus {
   box-shadow: 0 0 0 4px rgba(47, 100, 255, 0.1);
 }
 
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.field { display: flex; flex-direction: column; gap: 8px; }
-.field label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); padding-left: 4px; }
-.full-width { grid-column: span 2; }
+.form-grid { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 15px 20px; /* 15px verticale, 20px orizzontale */
+  align-items: flex-end; /* Allinea perfettamente gli input se le label hanno altezze diverse */
+}
+/* Assicura che input e select abbiano la stessa altezza esatta */
+.form-grid input, 
+.form-grid select {
+  height: 45px; 
+  box-sizing: border-box;
+  margin: 0; /* Rimuove margini che creano asimmetria */
+}
+/* Sistema lo spazio tra label e input */
+.field { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 5px; 
+}
+/* Selettore Stagione e Slider devono occupare tutta la riga */
+.full-width { 
+  grid-column: span 2; 
+}
+/* Allineamento specifico per lo slider del traffico */
+.slider-container {
+  grid-column: span 2;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
 /* Buttons */
 .btn-primary, .btn-save {

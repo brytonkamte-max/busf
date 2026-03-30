@@ -83,66 +83,11 @@
         </ul>
       </section>
 
-      <!-- ADD STOP FORM -->
-      <section class="add-section">
-        <div class="add-card">
-          <div class="add-card-header">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
-            </svg>
-            Aggiungi Fermata
-          </div>
-
-          <div class="add-fields">
-            <div class="field-group field-sm">
-              <label>Pos.</label>
-              <input [(ngModel)]="newStop.position" type="number" placeholder="1" />
-            </div>
-            <div class="field-group field-lg">
-              <label>Città</label>
-              <input [(ngModel)]="newStop.city" type="text" placeholder="Milano" />
-            </div>
-            <div class="field-group field-xl">
-              <label>Indirizzo</label>
-              <input [(ngModel)]="newStop.address" type="text" placeholder="Via Roma, 1" />
-            </div>
-            <div class="field-group field-sm">
-              <label>Min</label>
-              <input [(ngModel)]="newStop.time" type="number" placeholder="—" />
-            </div>
-          </div>
-
-          <button
-            class="btn-add"
-            (click)="addStop()"
-            [disabled]="!newStop.position || !newStop.city || !newStop.address"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Aggiungi
-          </button>
+         
         </div>
 
-        @if (successMessage) {
-          <div class="toast toast-success">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-            {{ successMessage }}
-          </div>
-        }
+      
 
-        @if (errorMessage) {
-          <div class="toast toast-error">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-            {{ errorMessage }}
-          </div>
-        }
-      </section>
-
-    </div>
+   
   }
 </div>

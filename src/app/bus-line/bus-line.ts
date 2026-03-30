@@ -57,7 +57,7 @@ getLastCity(line: Line): string {
       this.loadLines();
     });
   }
-
+// modificare questo metodo con cercare per indirizzo.
   searchLines(): void {
     if (!this.search.trim()) {
       this.loadLines();
