@@ -21,7 +21,7 @@ export class Menu {
    menuItems: MenuItem[] = [
     { label: 'Lines',    icon: '🚌', route: 'lines'    },
 
-    { label: 'Trip',    icon: '✈️', route: 'trips'    },
+    { label: 'Dashboard',    icon: '📊', route: 'trips'    },
   
     
     { label: 'FindTrip', icon: '🔍', route: 'Findtrips' },

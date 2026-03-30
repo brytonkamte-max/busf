@@ -14,44 +14,57 @@ import { TripComponent } from '../trip-component/trip-component';
   styleUrl: './trip-list.css',
 })
 export class TripList {
-// Iniettiamo il servizio qui dentro
-  private tripService = inject(BusTripService);
-
-  @Input({ required: true }) trip!: Trip;
   
-  // Notifichiamo comunque il padre che l'ID è stato eliminato con successo
+  private tripService = inject(BusTripService);
+  @Input({ required: true }) trip!: Trip;
   @Output() onDeleted = new EventEmitter<number>();
 
- get firstStop(): string {
-  // Ora leggiamo direttamente da this.trip.stops come da tuo JSON
-  const stops = this.trip.stops; 
-  if (stops && stops.length > 0) {
-    const sorted = [...stops].sort((a, b) => a.position - b.position);
-    return `${sorted[0].city} - ${sorted[0].address}`;
+  // Calcola i minuti di ritardo (es. 0.5 traffico = 30 min)
+  get delayMinutes(): number {
+    return Math.round((this.trip.trafficMultiplier || 0) * 60);
   }
-  return 'Partenza non trovata';
-}
 
-get lastStop(): string {
-  const stops = this.trip.stops;
-  if (stops && stops.length > 0) {
-    const sorted = [...stops].sort((a, b) => a.position - b.position);
-    return `${sorted[sorted.length - 1].city} - ${sorted[sorted.length - 1].address}`;
+  // Funzione di utilità per sommare minuti a "HH:mm"
+  public addMinutes(time: string, mins: number): string {
+    if (!time) return '--:--';
+    const [h, m] = time.split(':').map(Number);
+    const d = new Date();
+    d.setHours(h, m + mins);
+    return d.toTimeString().slice(0, 5);
   }
-  return 'Arrivo non trovato';
-}
 
-  // Funzione di cancellazione "Diretta"
+  // Partenza: SEMPRE PUNTUALE (non aggiungiamo delayMinutes qui)
+  get departureTime(): string {
+    return this.trip.start ? this.trip.start.slice(0, 5) : '--:--';
+  }
+
+  // Arrivo: Sommiamo tempo di percorrenza dell'ultima fermata + RITARDO traffico
+  get arrivalTime(): string {
+    const stops = this.trip.stops || [];
+    if (stops.length === 0) return '--:--';
+    
+    const lastStop = [...stops].sort((a, b) => a.position - b.position).pop();
+    const totalMinutesToAdd = (lastStop?.time || 0) + this.delayMinutes;
+    
+    return this.addMinutes(this.trip.start, totalMinutesToAdd);
+  }
+
+  get firstStop(): string {
+    if (!this.trip.stops?.length) return 'N/A';
+    return [...this.trip.stops].sort((a, b) => a.position - b.position)[0].city;
+  }
+
+  get lastStop(): string {
+    if (!this.trip.stops?.length) return 'N/A';
+    const sorted = [...this.trip.stops].sort((a, b) => a.position - b.position);
+    return sorted[sorted.length - 1].city;
+  }
+
   remove() {
-  // 1. Chiamata immediata al servizio usando l'ID univoco di QUESTO trip
-  this.tripService.deleteTrip(this.trip.id).subscribe({
-    next: () => {
-      // 2. Notifichiamo il padre passandogli l'ID esatto da rimuovere dalla vista
+    this.tripService.deleteTrip(this.trip.id).subscribe(() => {
       this.onDeleted.emit(this.trip.id);
-    },
-    error: (err) => console.error("Errore server:", err)
-  });
-}
+    });
+  }
 
 
 

@@ -43,20 +43,8 @@
     <option [value]="city"></option>
   }
 </datalist>
-          <!-- Slider Traffico -->
-    <div class="field traffic-field">
-      <label>Traffico</label>
-      <div class="traffic-slider-wrap">
-        <input 
-          type="range" 
-          min="0" max="1" step="0.05"
-          [(ngModel)]="trafficMultiplier"
-          (change)="onTraffiChange()"
-          class="traffic-slider"
-        />
-        <span class="traffic-label-badge">{{ trafficLabel }}</span>
-      </div>
-    </div> 
+         
+    
       <button class="btn-add" (click)="find()" [disabled]="!searchPartenza || !searchDestinazione">
         Find
       </button>

@@ -1,32 +1,62 @@
-<div class="page">
+<div class="user-container">
+  <header class="user-header">
+    <div class="title-section">
+      <h1>Linee Bus</h1>
+      <p>Trova la tua direzione e pianifica il viaggio</p>
+    </div>
+    
+    <div class="search-box">
+      <div class="input-wrapper">
+        <i class="search-icon">🔍</i>
+        <input
+          [(ngModel)]="search"
+          type="text"
+          placeholder="Cerca linea o città..."
+          (keyup.enter)="searchLines()"
+        />
+      </div>
+      <button class="btn-search" (click)="searchLines()">Cerca</button>
+    </div>
+  </header>
 
-
-  <div class="search-bar">
-    <input
-      [(ngModel)]="search"
-      type="text"
-      placeholder="Search line or address..."
-    />
-    <button (click)="searchLines()">Search</button>
-  </div>
-
-  <div class="lines-container">
+  <div class="lines-grid">
     @for (line of lines(); track line.id) {
       <div class="line-card" (click)="openLine(line)">
-        <div class="line-header">
-          <span class="line-dot"></span>
-          <span>LINE {{ line.name }}</span>
-        </div>
+        <div class="card-accent"></div>
+        
+        <div class="card-content">
+          <div class="line-identity">
+            <span class="line-number">{{ line.name }}</span>
+            <span class="line-label">LINEA</span>
+          </div>
 
-        <div class="line-preview">
-          <span>{{ line.stops?.length ?? 0 }} stops</span>
+          <div class="line-route">
+            <div class="route-point">
+              <span class="dot"></span>
+              <span class="city">{{ getFirstCity(line) }}</span>
+            </div>
+            <div class="route-line"></div>
+            <div class="route-point">
+              <span class="dot outline"></span>
+              <span class="city">{{ getLastCity(line) }}</span>
+            </div>
+          </div>
+
+          <div class="line-footer">
+            <span class="stops-count">
+              <i>🚏</i> {{ line.stops?.length ?? 0 }} fermate
+            </span>
+            <span class="view-details">Vedi orari →</span>
+          </div>
         </div>
       </div>
     } @empty {
-      <div class="empty">
-        No lines yet.
+      <div class="empty-state">
+        <div class="empty-icon">🚌</div>
+        <h3>Nessuna linea trovata</h3>
+        <p>Prova a cambiare i termini della ricerca.</p>
+        <button (click)="loadLines()" class="btn-reset">Mostra tutte le linee</button>
       </div>
     }
   </div>
-
 </div>
