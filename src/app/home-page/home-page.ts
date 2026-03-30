@@ -1,7 +1,10 @@
+import { PortalUserService } from './../portal-user-service';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BusLineService } from '../bus-line-service'; // Import corretto
 import { Line } from '../model/entities';
+
+
 
 @Component({
   selector: 'app-home-page',
@@ -18,7 +21,8 @@ export class HomePage implements OnInit {
 
   constructor(
     private busLineService: BusLineService, // CamelCase per l'istanza
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public PortalUserService: PortalUserService
   ) {}
 
   ngOnInit() {

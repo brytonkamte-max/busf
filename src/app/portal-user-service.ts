@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { PortalUser } from './model/entities';
 import { Observable, tap } from 'rxjs';
@@ -15,6 +15,9 @@ export class PortalUserService {
 
   private _loggedUser = signal<PortalUser | null>(this.getUserFromStorage());
   loggedUser = this._loggedUser.asReadonly();
+
+  // Restituisce true solo se l'utente è loggato e il suo ruolo è 'ADMIN'
+  isAdmin = computed(() => this._loggedUser()?.role === 'ADMIN');
 
   constructor() {}
 
