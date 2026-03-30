@@ -27,6 +27,7 @@ export class Menu {
 
     { label: 'Dashboard',    icon: '📊', route: 'trips', requiresAuth: true },
 
+    { label: 'Nuova corsa', icon: '➕', route: 'trips', requiresAuth: true },
 
     { label: 'FindTrip', icon: '🔍', route: 'Findtrips' },
   ];
