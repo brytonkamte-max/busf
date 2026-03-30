@@ -35,129 +35,101 @@
 
   <div class="main-db-grid">
     <div class="management-column">
-  <div class="admin-card">
-    <div class="card-header">
-      <div class="status-dot yellow"></div>
-      <span>Nuova Linea</span>
-    </div>
-    <div class="inline-form">
-      <input type="text" [(ngModel)]="newLineName" placeholder="Nome linea..." />
       
-      <button 
-        class="btn-primary" 
-        (click)="addLine()" 
-        [disabled]="!newLineName.trim()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-        </svg>
-        Aggiungi
-      </button>
-    </div>
-  </div>
-
-  <div class="toast-container">
-    @if (successMessage) {
-      <div class="toast toast-success">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        {{ successMessage }}
+      <div class="admin-card">
+        <div class="card-header">
+          <div class="status-dot yellow"></div>
+          <span>Nuova Linea</span>
+        </div>
+        <div class="inline-form">
+          <input type="text" [(ngModel)]="newLineName" placeholder="Nome linea..." />
+          <button 
+            class="btn-primary" 
+            (click)="addLine()" 
+            [disabled]="!newLineName.trim()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Aggiungi
+          </button>
+        </div>
       </div>
-    }
 
-    @if (errorMessage) {
-      <div class="toast toast-error">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        {{ errorMessage }}
-      </div>
-    }
-  </div>
       <div class="add-trip-card">
         <div class="card-header">
           <div class="status-dot blue"></div>
           <span>Programma Corsa</span>
         </div>
+        
         <div class="form-grid">
-    <div class="field">
-      <label>Linea</label>
-      <select [(ngModel)]="newTrip.line">
-        <option [ngValue]="null">Seleziona...</option>
-        @for (line of lines(); track line.id) {
-          <option [ngValue]="line">LINEA {{ line.name }}</option>
-        }
-      </select>
-    </div>
+          <div class="field">
+            <label>Linea</label>
+            <select [(ngModel)]="newTrip.line">
+              <option [ngValue]="null">Seleziona...</option>
+              @for (line of lines(); track line.id) {
+                <option [ngValue]="line">LINEA {{ line.name }}</option>
+              }
+            </select>
+          </div>
 
-    <div class="field">
-      <label>Ora Partenza</label>
-      <input type="time" [(ngModel)]="newTrip.start" />
-    </div>
+          <div class="field">
+            <label>Ora Partenza</label>
+            <input type="time" [(ngModel)]="newTrip.start" />
+          </div>
 
-    <div class="field">
-      <label>Data</label>
-      <input type="date" [(ngModel)]="newTrip.date" />
-    </div>
+          <div class="field">
+            <label>Data</label>
+            <input type="date" [(ngModel)]="newTrip.date" />
+          </div>
 
-    <div class="field">
-      <label>Tipo Giorno</label>
-      <select [(ngModel)]="newTrip.daytype">
-        <option value="FERIALE">Feriale</option>
-        <option value="FESTIVO">Festivo</option>
-        <option value="BOTH">Entrambi</option>
-      </select>
-    </div>
+          <div class="field">
+            <label>Tipo Giorno</label>
+            <select [(ngModel)]="newTrip.daytype">
+              <option value="FERIALE">Feriale</option>
+              <option value="FESTIVO">Festivo</option>
+              <option value="BOTH">Entrambi</option>
+            </select>
+          </div>
 
-    <div class="field">
-      <label>Stagione</label>
-      <select [(ngModel)]="newTrip.season">
-        <option value="SUMMER">Estate</option>
-        <option value="WINTER">Inverno</option>
-      </select>
-    </div>
+          <div class="field full-width">
+            <label>Stagione</label>
+            <select [(ngModel)]="newTrip.season">
+              <option value="SUMMER">Estate</option>
+              <option value="WINTER">Inverno</option>
+            </select>
+          </div>
 
-    <div class="field full-width">
-      <label>Simulazione Traffico: <b>{{ (newTrip.trafficMultiplier * 100).toFixed(0) }}%</b></label>
-      <div class="slider-container">
-        <input type="range" min="0" max="1" step="0.1" [(ngModel)]="newTrip.trafficMultiplier" />
+          <div class="field full-width">
+            <label>Simulazione Traffico: <b>{{ (newTrip.trafficMultiplier * 100).toFixed(0) }}%</b></label>
+            <div class="slider-container">
+              <input type="range" min="0" max="1" step="0.1" [(ngModel)]="newTrip.trafficMultiplier" />
+            </div>
+          </div>
+
+          @if (successMessage) {
+            <div class="toast toast-success full-width">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>{{ successMessage }}</span>
+            </div>
+          }
+
+          @if (errorMessage) {
+            <div class="toast toast-error full-width">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>{{ errorMessage }}</span>
+            </div>
+          }
+
+          <button class="btn-save full-width" (click)="addTrip()" [disabled]="!newTrip.line || !newTrip.start">
+            Salva Corsa
+          </button>
+        </div>
       </div>
-    </div>
-
-    <button
-      class="btn-add"
-      (click)="addTrip()"
-      [disabled]="!newTrip.line || !newTrip.start"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-      </svg>
-      Aggiungi
-    </button>
-
-    @if (successMessage) {
-      <div class="toast toast-success">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-        {{ successMessage }}
-      </div>
-    }
-
-    @if (errorMessage) {
-      <div class="toast toast-error">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
-        {{ errorMessage }}
-      </div>
-    }
-
-    <button class="btn-save full-width" (click)="addTrip()" [disabled]="!newTrip.line || !newTrip.start">
-      Salva Corsa
-    </button>
-  </div>
-</div>
-    </div>
-    
-
-    <div class="list-column">
+    </div> <div class="list-column">
       <div class="list-header">
         <h3 class="section-title">Elenco Corse Attive</h3>
       </div>
@@ -169,5 +141,5 @@
         }
       </div>
     </div>
-  </div>
-</div>
+
+  </div> </div> ```
