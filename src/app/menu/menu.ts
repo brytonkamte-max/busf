@@ -1,28 +1,31 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { BusLine } from '../bus-line/bus-line';
+import { PortalUserService } from '../portal-user-service';
 
 
 interface MenuItem {
   label: string;
   icon: string;
   route: string;
-  exact?: boolean;
+  requiresAuth?: boolean;
 }
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterLink, RouterLinkActive, CommonModule],
+  imports: [RouterLink, CommonModule],
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
 export class Menu {
-
+  
+  portalUserService = inject(PortalUserService);
+  
    menuItems: MenuItem[] = [
-    { label: 'Home', route: '/', icon: '🏠', exact: true },
+    { label: 'Home', route: '/', icon: '🏠'},
 
-    { label: 'Dashboard',    icon: '📊', route: 'trips'    },
+    { label: 'Dashboard',    icon: '📊', route: 'trips', requiresAuth: true },
   
     
     { label: 'FindTrip', icon: '🔍', route: 'Findtrips' },

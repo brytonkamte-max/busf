@@ -1,0 +1,50 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Accesso Admin</h1>
+      <p>Effettua il login per gestire il portale bus.</p>
+    </div>
+
+    <form (ngSubmit)="doLogin()" #loginForm="ngForm" class="auth-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          [(ngModel)]="loginData.username"
+          required
+          placeholder="Inserisci username"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          [(ngModel)]="loginData.password"
+          required
+          placeholder="Inserisci password"
+        />
+      </div>
+
+      @if (message()) {
+        <div class="message success">
+          {{ message() }}
+        </div>
+      }
+
+      @if (errorMessage()) {
+        <div class="message error">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <button type="submit" [disabled]="loginForm.invalid">
+        Accedi
+      </button>
+    </form>
+  </div>
+</div>
