@@ -1,11 +1,13 @@
 <div class="auth-page">
   <div class="auth-card">
+
     <div class="auth-header">
-      <h1>Accesso Admin</h1>
-      <p>Effettua il login per gestire il portale bus.</p>
+      <h1>Area riservata</h1>
+      <p>Inserisci le tue credenziali per continuare.</p>
     </div>
 
     <form (ngSubmit)="doLogin()" #loginForm="ngForm" class="auth-form">
+
       <div class="form-group">
         <label for="username">Username</label>
         <input
@@ -14,7 +16,7 @@
           type="text"
           [(ngModel)]="loginData.username"
           required
-          placeholder="Inserisci username"
+          placeholder="Username"
         />
       </div>
 
@@ -26,7 +28,7 @@
           type="password"
           [(ngModel)]="loginData.password"
           required
-          placeholder="Inserisci password"
+          placeholder="Password"
         />
       </div>
 
@@ -45,6 +47,12 @@
       <button type="submit" [disabled]="loginForm.invalid">
         Accedi
       </button>
+
+      <p class="auth-footer">
+        Accesso consentito solo al personale autorizzato
+      </p>
+
     </form>
+
   </div>
 </div>

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BusLine } from '../bus-line/bus-line';
 import { PortalUserService } from '../portal-user-service';
 
@@ -14,21 +14,30 @@ interface MenuItem {
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, RouterLinkActive],
   templateUrl: './menu.html',
   styleUrl: './menu.css',
 })
 export class Menu {
-  
   portalUserService = inject(PortalUserService);
-  
-   menuItems: MenuItem[] = [
-    { label: 'Home', route: '/', icon: '🏠'},
 
-    { label: 'Dashboard',    icon: '📊', route: 'trips', requiresAuth: true },
-  
-    
-    { label: 'FindTrip', icon: '🔍', route: 'Findtrips' },
+  isDropdownOpen = false;
+
+  menuItems: MenuItem[] = [
+    { label: 'Home', route: '/', icon: '🚌' },
+    { label: 'Dashboard', route: '/trips', icon: '📊', requiresAuth: true },
   ];
 
+  get user() {
+    return this.portalUserService.loggedUser();
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  logout() {
+    this.portalUserService.doLogout();
+    this.isDropdownOpen = false;
+  }
 }
