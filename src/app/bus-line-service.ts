@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 })
 export class BusLineService {
 
- private apiLinesUrl = 'https://busb-production.up.railway.app/api/lines';
+ private apiLinesUrl = 'http://localhost:8080/api/lines';
   
  
   constructor(private http: HttpClient) {}

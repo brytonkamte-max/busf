@@ -11,7 +11,7 @@ export class PortalUserService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private apiUrl = 'https://busb-production.up.railway.app/api/users';
+  private apiUrl = 'http://localhost:8080/api/users';
 
   private _loggedUser = signal<PortalUser | null>(this.getUserFromStorage());
   loggedUser = this._loggedUser.asReadonly();

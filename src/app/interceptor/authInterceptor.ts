@@ -3,6 +3,10 @@ import { HttpInterceptorFn } from '@angular/common/http';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('token');
 
+  if (req.url.includes('maps.googleapis.com')) {
+    return next(req);
+  }
+
   if (!token) {
     return next(req);
   }
