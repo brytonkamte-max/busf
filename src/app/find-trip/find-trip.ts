@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Output, Signal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BusTripService } from '../bus-trip-service';
-import { Trip } from '../model/entities';
+import { Line, Trip } from '../model/entities';
 import { TripList } from '../trip-list/trip-list';
 import { firstValueFrom, last } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { BusLineService } from '../bus-line-service';
 
 @Component({
   selector: 'app-find-trip',
@@ -14,7 +15,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './find-trip.css',
 })
 export class FindTrip {
-private tripService = inject(BusTripService);
+  private tripService = inject(BusTripService);
+  private lineService = inject(BusLineService);
   private http = inject(HttpClient);
 
   searchPartenza = '';
@@ -26,10 +28,12 @@ private tripService = inject(BusTripService);
   filteredTrips = signal<Trip[]>([]);
   hasSearched = signal(false);
   availableCities = signal<string[]>([]);
+  lines = signal<Line[]>([]);
 
   private GOOGLE_API_KEY = 'AIzaSyDq2q4u-fP_DVkliNrtczSymGwadn2O7BU';
 
   nearestStop = signal<string | null>(null);
+  nearestLine = signal<string | null>(null);
   geoLoading = signal(false);
   geoError = signal<string | null>(null);
 
@@ -38,6 +42,31 @@ private tripService = inject(BusTripService);
     if (this.trafficMultiplier <= 0.3) return 'Traffico lieve';
     if (this.trafficMultiplier <= 0.6) return 'Traffico medio';
     return 'Traffico intenso';
+  }
+
+  ngOnInit() {
+    let now = new Date();
+    this.searchDate = now.toISOString().split('T')[0];
+    this.searchTime = now.toTimeString().slice(0, 5);
+
+    this.tripService.getTrips().subscribe(trips => {
+      let cities = new Set<string>();
+
+      trips.forEach(t => {
+        t.stops?.forEach(s => cities.add(s.city));
+      });
+
+      this.availableCities.set(Array.from(cities).sort());
+    });
+
+    this.loadLines();
+  }
+
+  loadLines(): void {
+    this.lineService.getLines().subscribe((lines) => {
+      this.lines.set(lines);
+      console.log('LINEE CARICATE:', lines);
+    });
   }
 
   find() {
@@ -69,20 +98,6 @@ private tripService = inject(BusTripService);
     this.searchDestinazione = temp;
   }
 
-  ngOnInit() {
-    let ora = new Date();
-    this.searchDate = ora.toISOString().split('T')[0];
-    this.searchTime = ora.toTimeString().slice(0, 5);
-
-    this.tripService.getTrips().subscribe(trips => {
-      let cities = new Set<string>();
-      trips.forEach(t => {
-        t.stops?.forEach(s => cities.add(s.city));
-      });
-      this.availableCities.set(Array.from(cities).sort());
-    });
-  }
-
   Geolocator = {
     getPosition: () => {
       if (!navigator.geolocation) {
@@ -93,8 +108,9 @@ private tripService = inject(BusTripService);
       this.geoLoading.set(true);
       this.geoError.set(null);
       this.nearestStop.set(null);
+      this.nearestLine.set(null);
 
-      let opzioni = {
+      let options = {
         enableHighAccuracy: true,
         timeout: 10000,
         maximumAge: 0
@@ -103,7 +119,7 @@ private tripService = inject(BusTripService);
       navigator.geolocation.getCurrentPosition(
         (position) => this.positionFound(position),
         (error) => this.geoErrorHandler(error),
-        opzioni
+        options
       );
     }
   };
@@ -117,19 +133,29 @@ private tripService = inject(BusTripService);
 
       trips.forEach(t => {
         t.stops?.forEach(s => {
-          let alreadyExists = stops.find(x => x.city === s.city && x.address === s.address);
+          let alreadyExists = stops.find(
+            x => x.city === s.city && x.address === s.address
+          );
+
           if (!alreadyExists) {
-            stops.push({ city: s.city, address: s.address });
+            stops.push({
+              city: s.city,
+              address: s.address
+            });
           }
         });
       });
 
       let nearest = '';
       let nearestCity = '';
+      let nearestLineName = '';
       let minDist = Infinity;
 
       for (let stop of stops) {
-        let query = `${stop.address}, ${stop.city}, Italia`;
+        let query = stop.address.toLowerCase().includes(stop.city.toLowerCase())
+          ? `${stop.address}, Italia`
+          : `${stop.address}, ${stop.city}, Italia`;
+
         console.log('Geocodifico:', query);
 
         let coords = await this.geocodeAddress(query);
@@ -144,19 +170,43 @@ private tripService = inject(BusTripService);
           minDist = dist;
           nearest = `${stop.city} - ${stop.address} (${Math.round(dist)} m)`;
           nearestCity = stop.city;
+
+          let tripWithStop = trips.find(t =>
+            t.stops?.some(s => s.city === stop.city && s.address === stop.address)
+          );
+
+          console.log('TRIP TROVATO:', tripWithStop);
+          console.log('LINEE DISPONIBILI:', this.lines());
+
+          if (tripWithStop && tripWithStop.line && tripWithStop.line.name) {
+            nearestLineName = tripWithStop.line.name;
+          } else {
+            let foundLine = this.lines().find(l =>
+              l.stops?.some(s => s.city === stop.city && s.address === stop.address)
+            );
+
+            if (foundLine) {
+              nearestLineName = foundLine.name;
+            } else {
+              nearestLineName = 'Linea sconosciuta';
+            }
+          }
         }
       }
 
       if (nearest) {
         this.nearestStop.set(nearest);
+        this.nearestLine.set(nearestLineName);
         this.searchPartenza = nearestCity;
       } else {
         this.nearestStop.set('Nessuna fermata trovata');
+        this.nearestLine.set(null);
       }
 
       this.geoLoading.set(false);
     });
   }
+
   private async geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
     let url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${this.GOOGLE_API_KEY}`;
 

@@ -4,115 +4,126 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
 
-      <div class="search-card">
-        <div class="search-card__header">
-          <span class="search-card__dot"></span>
-          <span>Cerca corse disponibili</span>
+```
+  <div class="search-card">
+    <div class="search-card__header">
+      <span class="search-card__dot"></span>
+      <span>Cerca corse disponibili</span>
+    </div>
+
+    <div class="search-card__body">
+
+      <div class="route-row">
+        <div class="field">
+          <label class="field__label">Partenza</label>
+          <div class="field__input-wrap">
+            <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="12" cy="12" r="9" stroke-opacity=".3"/>
+            </svg>
+            <input type="text" [(ngModel)]="searchPartenza" list="city-list" placeholder="Da dove parti?" class="field__input" />
+          </div>
         </div>
 
-        <div class="search-card__body">
+        <button class="swap-btn" (click)="swapCities()" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+            <path d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4"/>
+          </svg>
+        </button>
 
-          <div class="route-row">
-            <div class="field">
-              <label class="field__label">Partenza</label>
-              <div class="field__input-wrap">
-                <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="9" stroke-opacity=".3"/></svg>
-                <input type="text" [(ngModel)]="searchPartenza" list="city-list" placeholder="Da dove parti?" class="field__input" />
-              </div>
-            </div>
-            <button class="swap-btn" (click)="swapCities()" type="button" title="Inverti">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4"/></svg>
-            </button>
-
-            <div class="field">
-              <label class="field__label">Destinazione</label>
-              <div class="field__input-wrap">
-                <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <input type="text" [(ngModel)]="searchDestinazione" list="city-list" placeholder="Dove vai?" class="field__input" />
-              </div>
-            </div>
+        <div class="field">
+          <label class="field__label">Destinazione</label>
+          <div class="field__input-wrap">
+            <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+            </svg>
+            <input type="text" [(ngModel)]="searchDestinazione" list="city-list" placeholder="Dove vai?" class="field__input" />
           </div>
-
-          <div class="meta-row">
-            <div class="field field--sm">
-              <label class="field__label">Data</label>
-              <div class="field__input-wrap">
-                <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                <input type="date" [(ngModel)]="searchDate" class="field__input" />
-              </div>
-            </div>
-
-            <div class="field field--sm">
-              <label class="field__label">Orario</label>
-              <div class="field__input-wrap">
-                <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                <input type="time" [(ngModel)]="searchTime" class="field__input" />
-              </div>
-            </div>
-
-            <button class="btn-search" (click)="find()" [disabled]="!searchPartenza || !searchDestinazione">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
-              Cerca corse
-            </button>
-          </div>
-          <!-- GeoLocator -->
-            <div class="geo-row">
-              <button class="btn-geo" (click)="Geolocator.getPosition()" [disabled]="geoLoading()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                  <circle cx="12" cy="12" r="3"/>
-                  <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
-                  <circle cx="12" cy="12" r="9" stroke-opacity=".2"/>
-                </svg>
-                @if (geoLoading()) { Ricerca fermata più vicina… }
-                @else { 📍 Usa la mia posizione }
-              </button>
-
-              @if (nearestStop()) {
-                <div class="geo-result">
-                  <span class="geo-result__label">Fermata più vicina:</span>
-                  <span class="geo-result__value">{{ nearestStop() }}</span>
-                </div>
-              }
-
-              @if (geoError()) {
-                <div class="geo-error">⚠️ {{ geoError() }}</div>
-              }
-            </div>
         </div>
       </div>
 
+      <div class="meta-row">
+        <div class="field field--sm">
+          <label class="field__label">Data</label>
+          <div class="field__input-wrap">
+            <input type="date" [(ngModel)]="searchDate" class="field__input" />
+          </div>
+        </div>
+
+        <div class="field field--sm">
+          <label class="field__label">Orario</label>
+          <div class="field__input-wrap">
+            <input type="time" [(ngModel)]="searchTime" class="field__input" />
+          </div>
+        </div>
+
+        <button class="btn-search" (click)="find()" [disabled]="!searchPartenza || !searchDestinazione">
+          Cerca corse
+        </button>
+      </div>
+
+      <!-- GEO -->
+      <div class="geo-row">
+
+        <button class="btn-geo" (click)="Geolocator.getPosition()" [disabled]="geoLoading()">
+          @if (geoLoading()) { Ricerca fermata… }
+          @else { 📍 Usa la mia posizione }
+        </button>
+
+        @if (nearestStop()) {
+          <div class="geo-result">
+            <span class="geo-result__label">Fermata più vicina:</span>
+            <span class="geo-result__value">{{ nearestStop() }}</span>
+          </div>
+        }
+
+        @if (nearestLine()) {
+          <div class="geo-result">
+            <span class="geo-result__label">Linea:</span>
+            <span class="geo-result__value">{{ nearestLine() }}</span>
+          </div>
+        }
+
+        @if (geoError()) {
+          <div class="geo-error">⚠️ {{ geoError() }}</div>
+        }
+
+      </div>
+
     </div>
+  </div>
+
+</div>
+```
+
   </section>
 
   <section class="results-section">
     <div class="results-inner">
 
-      <div class="results-meta">
-        <div class="results-meta__left">
-          <span class="live-dot"></span>
-          <h3 class="results-title">Corse disponibili</h3>
-        </div>
-        <span class="results-count" *ngIf="filteredTrips().length">{{ filteredTrips().length }} risultati</span>
-      </div>
-      <ul class="popular-routes">
-        <li>Monza ↔ Arcore</li>
-        <li>Arcore ↔ Monza</li>
-      </ul>
-    </div>
+```
+  <div class="results-meta">
+    <h3>Corse disponibili</h3>
+    <span *ngIf="filteredTrips().length">{{ filteredTrips().length }} risultati</span>
+  </div>
 
-      <div class="results-list">
-        @for (t of filteredTrips(); track t.id) {
-          <app-trip-list [trip]="t" class="trip-item"></app-trip-list>
-        } @empty {
-          <div class="empty-state">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1.5" fill="currentColor"/></svg>
-            <p>Inserisci partenza e destinazione per vedere le corse disponibili.</p>
-          </div>
-        }
-      </div>
-<datalist id="city-list">
-  @for (city of availableCities(); track city) {
-    <option [value]="city"></option>
-  }
-</datalist>
+  <div class="results-list">
+    @for (t of filteredTrips(); track t.id) {
+      <app-trip-list [trip]="t"></app-trip-list>
+    } @empty {
+      <p>Nessuna corsa trovata</p>
+    }
+  </div>
 
+</div>
+```
+
+  </section>
+
+  <datalist id="city-list">
+    @for (city of availableCities(); track city) {
+      <option [value]="city"></option>
+    }
+  </datalist>
+
+</div>
