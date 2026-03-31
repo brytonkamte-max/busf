@@ -94,6 +94,11 @@
         </div>
         <span class="results-count" *ngIf="filteredTrips().length">{{ filteredTrips().length }} risultati</span>
       </div>
+      <ul class="popular-routes">
+        <li>Monza ↔ Arcore</li>
+        <li>Arcore ↔ Monza</li>
+      </ul>
+    </div>
 
       <div class="results-list">
         @for (t of filteredTrips(); track t.id) {
@@ -105,12 +110,6 @@
           </div>
         }
       </div>
-
-    </div>
-  </section>
-
-</div>
-
 <datalist id="city-list">
   @for (city of availableCities(); track city) {
     <option [value]="city"></option>

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BusTripService } from '../bus-trip-service';
 import { Trip } from '../model/entities';
 import { TripList } from '../trip-list/trip-list';
-import { last } from 'rxjs';
+import { firstValueFrom, last } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -15,108 +15,91 @@ import { HttpClient } from '@angular/common/http';
 })
 export class FindTrip {
 private tripService = inject(BusTripService);
-  
+  private http = inject(HttpClient);
+
   searchPartenza = '';
   searchDestinazione = '';
-
-  // Inizializziamo con valori vuoti o stringhe
-  searchTime = ''; 
+  searchTime = '';
   searchDate = '';
-  // Moltiplicatore traffico (0 = nessun traffico, 1 = 100%)
   trafficMultiplier = 0;
 
-  // Creiamo un segnale interno per gestire la lista dei risultati
   filteredTrips = signal<Trip[]>([]);
-  // Per gestire lo stato "nessun risultato trovato"
   hasSearched = signal(false);
   availableCities = signal<string[]>([]);
 
-  // inserimento della KEY di GeoCodingAPI che ci permette di trasformare le vie in coordinate
   private GOOGLE_API_KEY = 'AIzaSyDq2q4u-fP_DVkliNrtczSymGwadn2O7BU';
 
   nearestStop = signal<string | null>(null);
   geoLoading = signal(false);
   geoError = signal<string | null>(null);
 
-  private http = inject(HttpClient);
-
-  // Etichetta leggibile per lo slide
   get trafficLabel(): string {
-  if (this.trafficMultiplier === 0) return 'Nessun traffico';
-  if (this.trafficMultiplier <= 0.3) return 'traffico lieve';
-  if (this.trafficMultiplier <= 0.6) return 'traffico medio';
-  return 'Traffico intenso';
-}
+    if (this.trafficMultiplier === 0) return 'Nessun traffico';
+    if (this.trafficMultiplier <= 0.3) return 'Traffico lieve';
+    if (this.trafficMultiplier <= 0.6) return 'Traffico medio';
+    return 'Traffico intenso';
+  }
 
- find() {
+  find() {
     this.tripService.getTrips().subscribe(allTrips => {
-      
-      const filtered = allTrips.filter(t => {
-        // 1. Filtro Città
-        const hasStart = t.stops?.some(s => s.city.toLowerCase().includes(this.searchPartenza.toLowerCase()));
-        const hasEnd = t.stops?.some(s => s.city.toLowerCase().includes(this.searchDestinazione.toLowerCase()));
-        
-        // 2. Filtro Data (se l'utente l'ha scelta)
-        // t.date deve essere in formato YYYY-MM-DD per combaciare con l'input date
-        const matchesDate = this.searchDate ? t.date === this.searchDate : true;
+      let filtered = allTrips.filter(t => {
+        let hasStart = t.stops?.some(s =>
+          s.city.toLowerCase().includes(this.searchPartenza.toLowerCase())
+        );
 
-        // 3. Filtro Orario (se l'utente l'ha scelto)
-        // t.start (HH:mm:ss) >= searchTime (HH:mm)
-        const matchesTime = this.searchTime ? t.start >= (this.searchTime + ":00") : true;
+        let hasEnd = t.stops?.some(s =>
+          s.city.toLowerCase().includes(this.searchDestinazione.toLowerCase())
+        );
+
+        let matchesDate = this.searchDate ? t.date === this.searchDate : true;
+        let matchesTime = this.searchTime ? t.start >= (this.searchTime + ':00') : true;
 
         return hasStart && hasEnd && matchesDate && matchesTime;
       });
 
-      // Prendiamo solo le ultime 4 (come indicato nel tuo header)
-      const lastFour = filtered.slice(-4);
+      let lastFour = filtered.slice(-4);
       this.filteredTrips.set(lastFour);
       this.hasSearched.set(true);
-
-     
     });
   }
 
   swapCities() {
-    const temp = this.searchPartenza;
+    let temp = this.searchPartenza;
     this.searchPartenza = this.searchDestinazione;
     this.searchDestinazione = temp;
   }
 
-  
+  ngOnInit() {
+    let ora = new Date();
+    this.searchDate = ora.toISOString().split('T')[0];
+    this.searchTime = ora.toTimeString().slice(0, 5);
 
-ngOnInit() {
-
-  const ora = new Date();
-  this.searchDate = ora.toISOString().split('T')[0]; // Imposta oggi
-  this.searchTime = ora.toTimeString().slice(0, 5);  // Imposta ora attuale (HH:mm)
-  
-  // Carichiamo le città uniche presenti nel database
-  this.tripService.getTrips().subscribe(trips => {
-    const cities = new Set<string>();
-    trips.forEach(t => {
-      t.stops?.forEach(s => cities.add(s.city));
+    this.tripService.getTrips().subscribe(trips => {
+      let cities = new Set<string>();
+      trips.forEach(t => {
+        t.stops?.forEach(s => cities.add(s.city));
+      });
+      this.availableCities.set(Array.from(cities).sort());
     });
-    // Ordiniamo alfabeticamente
-    this.availableCities.set(Array.from(cities).sort());
-  });
-}
+  }
 
-  // Metodo cella possizione trami il GPS
   Geolocator = {
     getPosition: () => {
-      if (!navigator.geolocation){
-        this.geoError.set('Geologalizzazione non supporta il browser')
+      if (!navigator.geolocation) {
+        this.geoError.set('Geolocalizzazione non supportata dal browser');
         return;
       }
+
       this.geoLoading.set(true);
       this.geoError.set(null);
       this.nearestStop.set(null);
 
-      const opzioni = {
+      let opzioni = {
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 10000,
         maximumAge: 0
       };
+
       navigator.geolocation.getCurrentPosition(
         (position) => this.positionFound(position),
         (error) => this.geoErrorHandler(error),
@@ -124,66 +107,101 @@ ngOnInit() {
       );
     }
   };
+
   private positionFound(position: GeolocationPosition) {
-  const userLat = position.coords.latitude;
-  const userLng = position.coords.longitude;
+    let userLat = position.coords.latitude;
+    let userLng = position.coords.longitude;
 
-  // Prendi tutte le fermate uniche
-  this.tripService.getTrips().subscribe(async trips => {
-    const stops: { city: string, address: string }[] = [];
-    trips.forEach(t => {
-      t.stops?.forEach(s => {
-        if (!stops.find(x => x.city === s.city && x.address === s.address)) {
-          stops.push({ city: s.city, address: s.address });
-        }
+    this.tripService.getTrips().subscribe(async trips => {
+      let stops: { city: string; address: string }[] = [];
+
+      trips.forEach(t => {
+        t.stops?.forEach(s => {
+          let alreadyExists = stops.find(x => x.city === s.city && x.address === s.address);
+          if (!alreadyExists) {
+            stops.push({ city: s.city, address: s.address });
+          }
+        });
       });
-    });
-    
-    // Geocodifica ogni fermata e calcola la distanza 
-    let nearest = '';
-    let minDist= Infinity;
 
-    for(const stop of stops) {
-      const coords = await this.geocodeAddress(`${stop.address}, ${stop.city}`);
-      if (!coords) continue;
+      let nearest = '';
+      let nearestCity = '';
+      let minDist = Infinity;
 
-      const dist = this.haversine(userLat, userLng, coords.lat, coords.lng);
-      if (dist < minDist) {
-        minDist = dist;
-        nearest = `${stop.city} - ${stop.address} (&{Math.round(dist)} m)`;
+      for (let stop of stops) {
+        let query = `${stop.address}, ${stop.city}, Italia`;
+        console.log('Geocodifico:', query);
+
+        let coords = await this.geocodeAddress(query);
+        console.log('Coordinate trovate per', query, coords);
+
+        if (!coords) continue;
+
+        let dist = this.haversine(userLat, userLng, coords.lat, coords.lng);
+        console.log('Distanza da', stop.address, ':', dist);
+
+        if (dist < minDist) {
+          minDist = dist;
+          nearest = `${stop.city} - ${stop.address} (${Math.round(dist)} m)`;
+          nearestCity = stop.city;
+        }
       }
-    }
-    this.nearestStop.set(nearest || 'Nessuna fermata trovata');
-    this.geoLoading.set(false);
 
       if (nearest) {
-        this.searchPartenza = nearest.split(' - ')[0];
+        this.nearestStop.set(nearest);
+        this.searchPartenza = nearestCity;
+      } else {
+        this.nearestStop.set('Nessuna fermata trovata');
       }
+
+      this.geoLoading.set(false);
     });
   }
+  private async geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
+    let url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${this.GOOGLE_API_KEY}`;
 
-  private async geocodeAddress(address: string): Promise<{lat: number, lng: number} | null> {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${this.GOOGLE_API_KEY}`;
     try {
-      const res: any = await this.http.get(url).toPromise();
-      if(res.results?.length>0) {
-        const loc = res.results[0].geometry.location;
-        return {lat: loc.lat, lng: loc.lng};
+      let res: any = await firstValueFrom(this.http.get(url));
+      console.log('Risposta geocoding per', address, res);
+
+      if (res.results && res.results.length > 0) {
+        let loc = res.results[0].geometry.location;
+        return { lat: loc.lat, lng: loc.lng };
       }
-    }catch (e) {}
+    } catch (e) {
+      console.error('Errore geocoding per', address, e);
+    }
+
     return null;
   }
+
   private haversine(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const R = 6371000;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) ** 2 +
-              Math.cos(lat1* Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
-              Math.sin(dLng/2) ** 2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    let R = 6371000;
+    let dLat = (lat2 - lat1) * Math.PI / 180;
+    let dLng = (lon2 - lon1) * Math.PI / 180;
+
+    let a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * Math.PI / 180) *
+      Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLng / 2) ** 2;
+
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
+
   private geoErrorHandler(error: GeolocationPositionError) {
     this.geoLoading.set(false);
-    this.geoError.set('Impossibile ottenere la posizione. Controlla i permessi.');
+
+    if (error.code === 1) {
+      this.geoError.set('Permesso posizione negato dal browser.');
+    } else if (error.code === 2) {
+      this.geoError.set('Posizione non disponibile.');
+    } else if (error.code === 3) {
+      this.geoError.set('Timeout nella richiesta della posizione.');
+    } else {
+      this.geoError.set('Errore sconosciuto nella geolocalizzazione.');
+    }
+
+    console.log('Errore geolocalizzazione:', error);
   }
 }
