@@ -290,3 +290,93 @@ a[routerLink="/authentication"].menu-item:hover {
     width: min(92vw, 280px);
   }
 }
+
+
+.menu {
+  /* Palette Deep Blue Enterprise */
+  --blue-deep:    #1e3a8a;     /* Blu Notte per elementi principali */
+  --blue-vivid:   #2563eb;     /* Blu Brillante per hover e attivi */
+  --blue-bg:      #0f172a;     /* Blu scurissimo quasi nero per lo sfondo */
+  --blue-light:   #dbeafe;     /* Celeste chiarissimo per testi secondari */
+  --white:        #ffffff;
+  --border:       rgba(255, 255, 255, 0.1);
+  --radius:       10px;
+
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  height: 76px;
+  padding: 0 28px;
+  /* Sfondo Blu Scuro Profondo con sfocatura */
+  background: rgba(15, 23, 42, 0.95); 
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  color: var(--white);
+}
+
+/* Logo: aggiungiamo un filtro per farlo risaltare sul blu scuro */
+.menu-logo img {
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
+}
+
+/* Voci di Menu */
+.menu-item {
+  color: rgba(255, 255, 255, 0.85) !important; /* Testo quasi bianco */
+  font-weight: 600;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white) !important;
+  transform: translateY(-1px);
+}
+
+/* Voce Attiva (Blu Brillante) */
+.menu-item.active {
+  background: var(--blue-vivid) !important;
+  color: var(--white) !important;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+}
+
+/* Pulsante Accedi / Authentication */
+a[routerLink="/authentication"].menu-item {
+  background: var(--white) !important;
+  color: var(--blue-bg) !important; /* Testo scuro su fondo bianco */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+a[routerLink="/authentication"].menu-item:hover {
+  background: var(--blue-light) !important;
+  transform: scale(1.03);
+}
+
+/* Dropdown Profilo */
+.profile-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--white);
+}
+
+.profile-dropdown {
+  background: #1e293b; /* Sfondo dropdown blu ardesia */
+  border: 1px solid var(--border);
+  color: var(--white);
+}
+
+.profile-card {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.profile-info strong {
+  color: var(--white);
+}
+
+.profile-info small {
+  color: var(--blue-light);
+}
