@@ -367,3 +367,59 @@
 
   .search-card__body { padding: 18px 16px 16px; }
 }
+
+.geo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-geo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-geo:hover:not(:disabled) { background: var(--navy-mid); }
+.btn-geo:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.geo-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--green-light);
+  border: 1px solid rgba(0,166,81,.2);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+}
+
+.geo-result__label {
+  font-weight: 700;
+  color: var(--green-dark);
+  white-space: nowrap;
+}
+
+.geo-result__value {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.geo-error {
+  font-size: 13px;
+  color: #dc2626;
+  font-weight: 600;
+}

@@ -20,7 +20,6 @@
                 <input type="text" [(ngModel)]="searchPartenza" list="city-list" placeholder="Da dove parti?" class="field__input" />
               </div>
             </div>
-
             <button class="swap-btn" (click)="swapCities()" type="button" title="Inverti">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4"/></svg>
             </button>
@@ -56,7 +55,29 @@
               Cerca corse
             </button>
           </div>
+          <!-- GeoLocator -->
+            <div class="geo-row">
+              <button class="btn-geo" (click)="Geolocator.getPosition()" [disabled]="geoLoading()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                  <circle cx="12" cy="12" r="9" stroke-opacity=".2"/>
+                </svg>
+                @if (geoLoading()) { Ricerca fermata più vicina… }
+                @else { 📍 Usa la mia posizione }
+              </button>
 
+              @if (nearestStop()) {
+                <div class="geo-result">
+                  <span class="geo-result__label">Fermata più vicina:</span>
+                  <span class="geo-result__value">{{ nearestStop() }}</span>
+                </div>
+              }
+
+              @if (geoError()) {
+                <div class="geo-error">⚠️ {{ geoError() }}</div>
+              }
+            </div>
         </div>
       </div>
 
