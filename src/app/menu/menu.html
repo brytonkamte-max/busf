@@ -4,6 +4,7 @@
   </div>
 
   <ul class="menu-list">
+
     @for (item of menuItems; track item.label) {
       @if (!item.requiresAuth || portalUserService.isLogged()) {
         <li>
@@ -13,8 +14,7 @@
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: item.route === '/' }"
           >
-            <span>{{ item.icon }}</span>
-            <span>{{ item.label }}</span>
+            {{ item.label }}
           </a>
         </li>
       }
@@ -22,23 +22,34 @@
 
     @if (!portalUserService.isLogged()) {
       <li>
-        <a class="menu-item" routerLink="/authentication" routerLinkActive="active">
-          Login
+        <a
+          class="menu-item"
+          routerLink="/authentication"
+          routerLinkActive="active"
+        >
+          Accedi
         </a>
       </li>
     }
 
     @if (portalUserService.isLogged()) {
       <li class="user-dropdown-container">
-        <button class="menu-item profile-btn" type="button" (click)="toggleDropdown()">
-          <span class="profile-icon">👤</span>
-          <span>{{ user?.username }}</span>
+
+        <button
+          class="menu-item profile-btn"
+          type="button"
+          (click)="toggleDropdown()"
+        >
+          {{ user?.username }}
         </button>
 
         @if (isDropdownOpen) {
           <div class="profile-dropdown">
+
             <div class="profile-card">
-              <div class="profile-avatar">👤</div>
+              <div class="profile-avatar">
+                {{ user?.username?.charAt(0) }}
+              </div>
 
               <div class="profile-info">
                 <strong>{{ user?.username }}</strong>
@@ -48,12 +59,19 @@
               </div>
             </div>
 
-            <button class="dropdown-logout-btn" type="button" (click)="logout()">
-              Logout
+            <button
+              class="dropdown-logout-btn"
+              type="button"
+              (click)="logout()"
+            >
+              Esci
             </button>
+
           </div>
         }
+
       </li>
     }
+
   </ul>
 </nav>

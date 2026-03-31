@@ -9,7 +9,7 @@ import { Trip } from './model/entities';
 })
 export class BusTripService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://192.168.0.100:8080/api/trips';
+  private apiUrl = 'http://localhost:8080/api/trips';
 
   // Ottiene i trip filtrati per la linea specifica
   getTripsByLine(lineId: number) {

@@ -10,7 +10,7 @@ export class BusStopService {
 
 
  // private apiLinesUrl = 'http://192.168.0.100:8080/api/lines';
-  private apiStopsUrl = 'http://192.168.0.100:8080/api/stops';
+  private apiStopsUrl = 'http://localhost:8080/api/stops';
 
   constructor(private http: HttpClient) {}
 
