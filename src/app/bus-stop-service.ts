@@ -9,8 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class BusStopService {
 
 
- // private apiLinesUrl = 'http://192.168.0.100:8080/api/lines';
-  private apiStopsUrl = 'http://192.168.0.100:8080/api/stops';
+  private apiStopsUrl = 'https://busb-production.up.railway.app/api/stops';
 
   constructor(private http: HttpClient) {}
 

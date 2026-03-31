@@ -1,47 +1,62 @@
-<div class="trip-card" [class.is-delayed]="delayMinutes > 0">
-  
-  <div class="time-section">
-    <div class="time-block">
-      <span class="label">PARTENZA</span>
-      <span class="time-value">{{ departureTime }}</span>
-      <span class="on-time-tag">● In orario</span>
+<div class="trip-card" [class.trip-card--delayed]="delayMinutes > 0">
+
+  <!-- Left: Line badge + route -->
+  <div class="trip-card__route">
+    <div class="line-badge">
+      <span class="line-badge__label">Linea</span>
+      <span class="line-badge__name">{{ trip.line?.name }}</span>
     </div>
-    
+    <div class="route-path">
+      <span class="route-city">{{ firstStop }}</span>
+      <svg class="route-arrow" viewBox="0 0 24 6" fill="none">
+        <line x1="0" y1="3" x2="20" y2="3" stroke="currentColor" stroke-width="1.5"/>
+        <polyline points="16,1 20,3 16,5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+      <span class="route-city route-city--dest">{{ lastStop }}</span>
+    </div>
+  </div>
+
+  <!-- Center: Times -->
+  <div class="trip-card__times">
     <div class="time-block">
-      <span class="label">ARRIVO STIMATO</span>
-      <div class="arrival-container">
+      <span class="time-block__label">Partenza</span>
+      <span class="time-block__value">{{ departureTime }}</span>
+      <span class="time-block__status time-block__status--ok">In orario</span>
+    </div>
+    <div class="time-sep">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    </div>
+    <div class="time-block">
+      <span class="time-block__label">Arrivo stimato</span>
+      <span class="time-block__value" [class.time-block__value--delayed]="delayMinutes > 0">
+        {{ arrivalTime }}
         @if (delayMinutes > 0) {
-          <span class="original-arrival">{{ addMinutes(trip.start, (trip.stops[trip.stops.length-1]?.time || 0)) }}</span>
+          <del class="time-block__original">{{ addMinutes(trip.start, (trip.stops[trip.stops.length-1]?.time || 0)) }}</del>
         }
-        <span class="time-value" [class.text-red]="delayMinutes > 0">{{ arrivalTime }}</span>
-      </div>
+      </span>
       @if (delayMinutes > 0) {
-        <span class="delay-tag">⚠️ +{{ delayMinutes }}m traffico</span>
+        <span class="time-block__status time-block__status--warn">+{{ delayMinutes }}min traffico</span>
+      } @else {
+        <span class="time-block__status time-block__status--ok">Puntuale</span>
       }
     </div>
   </div>
 
-  <div class="route-section">
-    <div class="header-line">
-      <span class="line-name">LINEA {{ trip.line?.name }}</span>
-    </div>
-    
-    <div class="path-display">
-      <span class="city">{{ firstStop }}</span>
-      <span class="arrow">→</span>
-      <span class="city destination">{{ lastStop }}</span>
-    </div>
-    
-    <div class="meta-info">
-      <span class="badge day" [ngClass]="trip.dayType?.toLowerCase() || ''">
+  <!-- Right: Meta badges + delete -->
+  <div class="trip-card__meta">
+    <div class="badges">
+      <span class="badge badge--day" [ngClass]="'badge--' + (trip.dayType?.toLowerCase() || '')">
         {{ trip.dayType }}
       </span>
-      <span class="badge season" [ngClass]="trip.season?.toLowerCase() || ''">
-        {{ trip.season === 'SUMMER' ? '☀️' : '❄️' }} {{ trip.season }}
+      <span class="badge badge--season" [ngClass]="trip.season === 'SUMMER' ? 'badge--summer' : 'badge--winter'">
+        {{ trip.season === 'SUMMER' ? 'Estate' : 'Inverno' }}
       </span>
-      <span class="date-display">📅 {{ trip.date | date:'dd/MM/yyyy' }}</span>
     </div>
+    <span class="trip-date">{{ trip.date | date:'dd/MM/yyyy' }}</span>
   </div>
 
-  <button class="delete-btn" (click)="remove()" title="Elimina corsa">✕</button>
+  <button class="trip-card__delete" (click)="remove()" title="Elimina corsa" type="button">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+
 </div>

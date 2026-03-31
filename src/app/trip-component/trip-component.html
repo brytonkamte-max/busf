@@ -1,145 +1,182 @@
-<div class="dashboard-container">
+<div class="dashboard">
+
   <header class="db-header">
-    <div class="header-content">
-      <h1>Admin Dashboard</h1>
-      <p>Monitoraggio e gestione corse in tempo reale</p>
+    <div>
+      <h1 class="db-title">Admin Dashboard</h1>
+      <p class="db-subtitle">Monitoraggio e gestione corse in tempo reale</p>
     </div>
-    <div class="current-date">
-      <i class="icon-calendar"></i> {{ today | date:'fullDate' }}
+    <div class="db-date">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      {{ today | date:'EEEE d MMMM yyyy' }}
     </div>
   </header>
 
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon blue-bg">🚌</div>
-      <div class="stat-info">
-        <span class="stat-label">Linee Attive</span>
-        <span class="stat-value">{{ lines().length }}</span>
+  <!-- KPI Strip -->
+  <div class="kpi-strip">
+    <div class="kpi">
+      <div class="kpi__icon kpi__icon--blue">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </div>
+      <div class="kpi__body">
+        <span class="kpi__label">Linee attive</span>
+        <span class="kpi__value">{{ lines().length }}</span>
       </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon yellow-bg">📅</div>
-      <div class="stat-info">
-        <span class="stat-label">Viaggi Totali</span>
-        <span class="stat-value">{{ trips().length }}</span>
+    <div class="kpi">
+      <div class="kpi__icon kpi__icon--green">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </div>
+      <div class="kpi__body">
+        <span class="kpi__label">Viaggi totali</span>
+        <span class="kpi__value">{{ trips().length }}</span>
       </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon red-bg">⚠️</div>
-      <div class="stat-info">
-        <span class="stat-label">In Ritardo</span>
-        <span class="stat-value">{{ delayedTripsCount }}</span>
+    <div class="kpi">
+      <div class="kpi__icon kpi__icon--amber">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      </div>
+      <div class="kpi__body">
+        <span class="kpi__label">In ritardo</span>
+        <span class="kpi__value">{{ delayedTripsCount }}</span>
       </div>
     </div>
   </div>
 
-  <div class="main-db-grid">
-    <div class="management-column">
-      
-      <div class="admin-card">
-        <div class="card-header">
-          <div class="status-dot yellow"></div>
-          <span>Nuova Linea</span>
+  <!-- Main grid -->
+  <div class="db-grid">
+
+    <!-- Left: Forms -->
+    <div class="db-forms">
+
+      <!-- Add line -->
+      <div class="panel">
+        <div class="panel__head">
+          <span class="panel__dot panel__dot--yellow"></span>
+          <span class="panel__title">Nuova linea</span>
         </div>
-        <div class="inline-form">
-          <input type="text" [(ngModel)]="newLineName" placeholder="Nome linea..." />
-          <button 
-            class="btn-primary" 
-            (click)="addLine()" 
-            [disabled]="!newLineName.trim()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Aggiungi
-          </button>
+        <div class="panel__body">
+          <div class="inline-add">
+            <input class="f-input" type="text" [(ngModel)]="newLineName" placeholder="Nome linea..." />
+            <button class="btn-add" (click)="addLine()" [disabled]="!newLineName.trim()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+              Aggiungi
+            </button>
+          </div>
+
+           @if (lineMessage) {
+              <div class="toast toast--success">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {{ lineMessage }}
+              </div>
+            }
+
+            @if (isError) {
+              <div class="toast toast--error">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                {{ lineMessage }}
+              </div>
+            }
+
+
+
+        </div>
+      </div>
+
+      <!-- Schedule trip -->
+      <div class="panel panel--grow">
+        <div class="panel__head">
+          <span class="panel__dot panel__dot--blue"></span>
+          <span class="panel__title">Programma corsa</span>
+        </div>
+        <div class="panel__body">
+          <div class="form-grid">
+
+            <div class="f-field f-field--half">
+              <label class="f-label">Linea</label>
+              <select class="f-input" [(ngModel)]="newTrip.line">
+                <option [ngValue]="null">Seleziona...</option>
+                @for (line of lines(); track line.id) {
+                  <option [ngValue]="line">Linea {{ line.name }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="f-field f-field--half">
+              <label class="f-label">Tipo giorno</label>
+              <select class="f-input" [(ngModel)]="newTrip.daytype">
+                <option value="FERIALE">Feriale</option>
+                <option value="FESTIVO">Festivo</option>
+                <option value="BOTH">Entrambi</option>
+              </select>
+            </div>
+
+            <div class="f-field f-field--half">
+              <label class="f-label">Ora partenza</label>
+              <input class="f-input" type="time" [(ngModel)]="newTrip.start" />
+            </div>
+
+            <div class="f-field f-field--half">
+              <label class="f-label">Data</label>
+              <input class="f-input" type="date" [(ngModel)]="newTrip.date" />
+            </div>
+
+            <div class="f-field">
+              <label class="f-label">Stagione</label>
+              <select class="f-input" [(ngModel)]="newTrip.season">
+                <option value="SUMMER">Estate</option>
+                <option value="WINTER">Inverno</option>
+              </select>
+            </div>
+
+            <div class="f-field">
+              <label class="f-label">
+                Traffico
+                <span class="f-label__value">{{ (newTrip.trafficMultiplier * 100).toFixed(0) }}%</span>
+              </label>
+              <input class="f-range" type="range" min="0" max="1" step="0.1" [(ngModel)]="newTrip.trafficMultiplier" />
+            </div>
+
+            @if (successMessage) {
+              <div class="toast toast--success">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {{ successMessage }}
+              </div>
+            }
+
+            @if (errorMessage) {
+              <div class="toast toast--error">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                {{ errorMessage }}
+              </div>
+            }
+
+            <button class="btn-save" (click)="addTrip()" [disabled]="!newTrip.line || !newTrip.start">
+              Salva corsa
+            </button>
+
+          </div>
         </div>
       </div>
 
-      <div class="add-trip-card">
-        <div class="card-header">
-          <div class="status-dot blue"></div>
-          <span>Programma Corsa</span>
-        </div>
-        
-        <div class="form-grid">
-          <div class="field">
-            <label>Linea</label>
-            <select [(ngModel)]="newTrip.line">
-              <option [ngValue]="null">Seleziona...</option>
-              @for (line of lines(); track line.id) {
-                <option [ngValue]="line">LINEA {{ line.name }}</option>
-              }
-            </select>
-          </div>
+    </div>
 
-          <div class="field">
-            <label>Ora Partenza</label>
-            <input type="time" [(ngModel)]="newTrip.start" />
-          </div>
-
-          <div class="field">
-            <label>Data</label>
-            <input type="date" [(ngModel)]="newTrip.date" />
-          </div>
-
-          <div class="field">
-            <label>Tipo Giorno</label>
-            <select [(ngModel)]="newTrip.daytype">
-              <option value="FERIALE">Feriale</option>
-              <option value="FESTIVO">Festivo</option>
-              <option value="BOTH">Entrambi</option>
-            </select>
-          </div>
-
-          <div class="field full-width">
-            <label>Stagione</label>
-            <select [(ngModel)]="newTrip.season">
-              <option value="SUMMER">Estate</option>
-              <option value="WINTER">Inverno</option>
-            </select>
-          </div>
-
-          <div class="field full-width">
-            <label>Simulazione Traffico: <b>{{ (newTrip.trafficMultiplier * 100).toFixed(0) }}%</b></label>
-            <div class="slider-container">
-              <input type="range" min="0" max="1" step="0.1" [(ngModel)]="newTrip.trafficMultiplier" />
-            </div>
-          </div>
-
-          @if (successMessage) {
-            <div class="toast toast-success full-width">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              <span>{{ successMessage }}</span>
-            </div>
-          }
-
-          @if (errorMessage) {
-            <div class="toast toast-error full-width">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-              </svg>
-              <span>{{ errorMessage }}</span>
-            </div>
-          }
-
-          <button class="btn-save full-width" (click)="addTrip()" [disabled]="!newTrip.line || !newTrip.start">
-            Salva Corsa
-          </button>
-        </div>
+    <!-- Right: Trips list -->
+    <div class="db-list">
+      <div class="list-head">
+        <h3 class="list-head__title">Corse attive</h3>
+        <span class="list-head__count">{{ trips().length }}</span>
       </div>
-    </div> <div class="list-column">
-      <div class="list-header">
-        <h3 class="section-title">Elenco Corse Attive</h3>
-      </div>
-      <div class="trips-scroll-area">
+      <div class="list-scroll">
         @for (t of trips(); track t.id) {
           <app-trip-list [trip]="t" (onDeleted)="removeLocally($event)"></app-trip-list>
         } @empty {
-          <div class="empty-state">Nessuna corsa programmata.</div>
+          <div class="empty-state">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Nessuna corsa programmata</span>
+          </div>
         }
       </div>
     </div>
 
-  </div> </div> ```
+  </div>
+</div>

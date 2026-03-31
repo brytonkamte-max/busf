@@ -98,7 +98,7 @@ export class LineDetail implements OnInit {
     const currentLine = this.line();
     if (!currentLine) return;
 
-    if (confirm('Sei sicuro di voler eliminare questa fermata?')) {
+    
       this.busStopService.deleteStop(stopId).subscribe({
         next: () => {
           this.loadLine(currentLine.id);
@@ -110,7 +110,7 @@ export class LineDetail implements OnInit {
           this.successMessage = '';
         }
       });
-    }
+    
   }
 
   goBack(): void {
