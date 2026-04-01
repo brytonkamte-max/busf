@@ -18,6 +18,7 @@ export class PortalUserService {
 
   // Restituisce true solo se l'utente è loggato e il suo ruolo è 'ADMIN'
   isAdmin = computed(() => this._loggedUser()?.role === 'ADMIN');
+  isBigliettaio = computed(() => this._loggedUser()?.role === 'BIGLIETTAIO');
 
   constructor() {}
 

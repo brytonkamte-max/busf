@@ -1,3 +1,4 @@
+
 /* ─── Trip Card ──────────────────────────── */
 .trip-card {
   position: relative;
@@ -22,7 +23,7 @@
   border-left: 3px solid var(--amber);
 }
 
-/* Dividers between columns */
+/* Dividers */
 .trip-card__times {
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
@@ -173,6 +174,37 @@
   font-size: 11px;
   font-weight: 600;
   color: var(--text-3);
+}
+
+/* ─── Print button ───────────────────────── */
+.btn-print {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: var(--navy-light, rgba(0,51,102,.07));
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background .18s, border-color .18s, color .18s, transform .15s, box-shadow .18s;
+  white-space: nowrap;
+}
+
+.btn-print:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,51,102,.25);
+}
+
+.btn-print:active {
+  transform: translateY(0);
 }
 
 /* ─── Delete ─────────────────────────────── */
