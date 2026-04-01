@@ -43,20 +43,22 @@
   </div>
 
   <!-- Right: Meta badges + delete -->
-  <div class="trip-card__meta">
-    <div class="badges">
-      <span class="badge badge--day" [ngClass]="'badge--' + (trip.dayType?.toLowerCase() || '')">
-        {{ trip.dayType }}
-      </span>
-      <span class="badge badge--season" [ngClass]="trip.season === 'SUMMER' ? 'badge--summer' : 'badge--winter'">
-        {{ trip.season === 'SUMMER' ? 'Estate' : 'Inverno' }}
-      </span>
-    </div>
-    <span class="trip-date">{{ trip.date | date:'dd/MM/yyyy' }}</span>
+<div class="trip-card__meta">
+  <div class="badges">
+    <span class="badge badge--day" [ngClass]="'badge--' + (trip.dayType?.toLowerCase() || '')">
+      {{ trip.dayType }}
+    </span>
+    <span class="badge badge--season" [ngClass]="trip.season === 'SUMMER' ? 'badge--summer' : 'badge--winter'">
+      {{ trip.season === 'SUMMER' ? 'Estate' : 'Inverno' }}
+    </span>
   </div>
-
-  <button class="trip-card__delete" (click)="remove()" title="Elimina corsa" type="button">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6 6 18M6 6l12 12"/></svg>
-  </button>
-
+  <span class="trip-date">{{ trip.date | date:'dd/MM/yyyy' }}</span>
 </div>
+
+@if (portalUserService.isAdmin()) {
+  <button class="trip-card__delete" (click)="remove()" title="Elimina corsa" type="button">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+      <path d="M18 6 6 18M6 6l12 12"/>
+    </svg>
+  </button>
+}

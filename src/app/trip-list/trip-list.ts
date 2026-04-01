@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TripComponent } from '../trip-component/trip-component';
+import { PortalUserService } from '../portal-user-service';
 
 @Component({
   selector: 'app-trip-list',
@@ -16,6 +17,7 @@ import { TripComponent } from '../trip-component/trip-component';
 export class TripList {
   
   private tripService = inject(BusTripService);
+  portalUserService = inject(PortalUserService);
   @Input({ required: true }) trip!: Trip;
   @Output() onDeleted = new EventEmitter<number>();
 

@@ -52,9 +52,9 @@ export class MapComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   private initMap(): void {
-    // Centro di default su Castelfranco Emilia se non c'è nulla
-    const baseLat = this.lat || this.userLat || 44.594;
-    const baseLng = this.lng || this.userLng || 11.052;
+    // Centro di default su Monza se non c'è nulla
+    const baseLat = this.lat || this.userLat || 45.5845;
+    const baseLng = this.lng || this.userLng || 9.2744;
 
     this.map = L.map('map', {
       center: [baseLat, baseLng],
