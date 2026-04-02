@@ -28,6 +28,7 @@ export class Menu {
     { label: 'Home', route: '/', icon: '🚌' },
     { label: 'Dashboard', route: '/trips', icon: '📊', requiresAuth: true, role: 'ADMIN' },
     { label: 'My Tickets', route: '/tickets', icon: '🎟️', requiresAuth: true, role: 'BIGLIETTAIO' },
+    { label: 'Tickets', route: '/tickets', icon: '🎟️', requiresAuth: true, role: 'ADMIN' }
   ];
 
   get user() {
