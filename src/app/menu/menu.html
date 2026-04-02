@@ -6,7 +6,10 @@
   <ul class="menu-list">
 
     @for (item of menuItems; track item.label) {
-      @if (!item.requiresAuth || portalUserService.isLogged()) {
+      @if (
+        (!item.requiresAuth || portalUserService.isLogged()) &&
+        (!item.role || user?.role === item.role)
+      ) {
         <li>
           <a
             class="menu-item"

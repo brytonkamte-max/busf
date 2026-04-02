@@ -24,6 +24,7 @@ export class TripList {
   private allLines: Line[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.portalUserService.loggedUser()?.role);
     if (changes['trip'] && this.trip) {
       this.resolveLineName();
     }
@@ -263,6 +264,9 @@ export class TripList {
 
     .ticket__number {
       text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
     }
 
     .ticket__number-label {
@@ -279,6 +283,12 @@ export class TripList {
       color: rgba(255,255,255,.85);
       font-family: monospace;
       letter-spacing: .06em;
+    }
+    .ticket__trip-id {
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,.92);
     }
 
     .route-strip {
@@ -453,16 +463,15 @@ export class TripList {
   <div class="ticket__header">
     <div class="ticket__brand">
       <img class="ticket__logo" src="Logoo.png" alt="logo" />
-      </div>
-      <div>
-        <div class="ticket__brand-name">Brianza<span>Bus</span></div>
-      </div>
+      <div class="ticket__brand-name">Brianza<span>Bus</span></div>
     </div>
+
     <div class="ticket__number">
       <div class="ticket__number-label">Biglietto N°</div>
       <div class="ticket__number-value">${ticketNumber}</div>
+      <div class="ticket__trip-id">Corsa #${this.trip.id}</div>
     </div>
-  </div>
+  </div> 
 
   <div class="route-strip">
     <div class="route-city">${this.firstStop}</div>

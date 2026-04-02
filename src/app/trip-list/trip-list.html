@@ -59,7 +59,7 @@
     <span class="trip-date">{{ trip.date | date:'dd/MM/yyyy' }}</span>
 
     <!-- Stampa biglietto -->
-    @if (portalUserService.isBigliettaio()) {
+    @if (portalUserService.isBigliettaio() || portalUserService.isAdmin()) {
     <button class="btn-print" (click)="printTicket()" type="button" title="Stampa biglietto">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
         <polyline points="6 9 6 2 18 2 18 9"/>
