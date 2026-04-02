@@ -1,14 +1,16 @@
-<div class="user-container">
-  <header class="user-header">
-    <div class="title-section">
-      <h1>Linee Bus</h1>
-      <p>Trova la tua direzione e pianifica il viaggio</p>
+<div class="lines-page">
+
+  <header class="lines-header">
+    <div>
+      <h1 class="lines-title">Linee Bus</h1>
+      <p class="lines-subtitle">Esplora i percorsi e pianifica il tuo viaggio</p>
     </div>
-    
-    <div class="search-box">
-      <div class="input-wrapper">
-        <i class="search-icon">🔍</i>
+
+    <div class="lines-search">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
         <input
+          class="search-input"
           [(ngModel)]="search"
           type="text"
           placeholder="Cerca città o indirizzo..."
@@ -22,41 +24,48 @@
   <div class="lines-grid">
     @for (line of lines(); track line.id) {
       <div class="line-card" (click)="openLine(line)">
-        <div class="card-accent"></div>
-        
-        <div class="card-content">
-          <div class="line-identity">
-            <span class="line-number">{{ line.name }}</span>
-            <span class="line-label">LINEA</span>
-          </div>
 
-          <div class="line-route">
-            <div class="route-point">
-              <span class="dot"></span>
-              <span class="city">{{ getFirstCity(line) }}</span>
-            </div>
-            <div class="route-line"></div>
-            <div class="route-point">
-              <span class="dot outline"></span>
-              <span class="city">{{ getLastCity(line) }}</span>
-            </div>
-          </div>
+        <div class="line-card__stripe"></div>
 
-          <div class="line-footer">
-            <span class="stops-count">
-              <i>🚏</i> {{ line.stops?.length ?? 0 }} fermate
+        <div class="line-card__body">
+          <div class="line-card__top">
+            <div class="line-num">
+              <span class="line-num__label">Linea</span>
+              <span class="line-num__value">{{ line.name }}</span>
+            </div>
+            <span class="stops-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><circle cx="12" cy="5" r="2"/><path d="M12 7v10M8 19h8"/></svg>
+              {{ line.stops?.length ?? 0 }} fermate
             </span>
-            <span class="view-details">Vedi orari →</span>
+          </div>
+
+          <div class="line-card__route">
+            <div class="route-dot route-dot--start"></div>
+            <span class="route-city">{{ getFirstCity(line) }}</span>
+            <div class="route-track">
+              <div class="route-track__line"></div>
+            </div>
+            <span class="route-city route-city--end">{{ getLastCity(line) }}</span>
+            <div class="route-dot route-dot--end"></div>
+          </div>
+
+          <div class="line-card__footer">
+            <span class="line-card__cta">
+              Vedi orari
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
           </div>
         </div>
+
       </div>
     } @empty {
-      <div class="empty-state">
-        <div class="empty-icon">🚌</div>
+      <div class="lines-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="44" height="44"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
         <h3>Nessuna linea trovata</h3>
-        <p>Prova a cambiare i termini della ricerca.</p>
-        <button (click)="loadLines()" class="btn-reset">Mostra tutte le linee</button>
+        <p>Prova con un termine diverso.</p>
+        <button class="btn-reset" (click)="loadLines()">Mostra tutte le linee</button>
       </div>
     }
   </div>
+
 </div>

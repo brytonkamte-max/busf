@@ -1,129 +1,108 @@
 <div class="page-wrapper">
-
-  <section class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-
-```
-  <div class="search-card">
-    <div class="search-card__header">
-      <span class="search-card__dot"></span>
-      <span>Cerca corse disponibili</span>
+  <header class="page-header">
+    <div class="page-header__inner">
+      <div class="page-header__left">
+        <div class="page-header__icon">🚌</div>
+        <div>
+          <h1 class="page-header__title">Cerca Corse</h1>
+          <p class="page-header__sub">Sistema Integrato BrianzaBus</p>
+        </div>
+      </div>
+      <div class="page-header__badge">
+        <span class="live-dot"></span> In tempo reale
+      </div>
     </div>
+  </header>
 
-    <div class="search-card__body">
-
-      <div class="route-row">
-        <div class="field">
-          <label class="field__label">Partenza</label>
-          <div class="field__input-wrap">
-            <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="4"/>
-              <circle cx="12" cy="12" r="9" stroke-opacity=".3"/>
-            </svg>
+  <section class="search-section">
+    <div class="search-section__inner">
+      <div class="search-card">
+        <div class="route-row">
+          <div class="field">
+            <label class="field__label">Partenza</label>
             <input type="text" [(ngModel)]="searchPartenza" list="city-list" placeholder="Da dove parti?" class="field__input" />
           </div>
-        </div>
 
-        <button class="swap-btn" (click)="swapCities()" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
-            <path d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4"/>
-          </svg>
-        </button>
+          <button class="swap-btn" (click)="swapCities()" type="button">🔄</button>
 
-        <div class="field">
-          <label class="field__label">Destinazione</label>
-          <div class="field__input-wrap">
-            <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-            </svg>
+          <div class="field">
+            <label class="field__label">Destinazione</label>
             <input type="text" [(ngModel)]="searchDestinazione" list="city-list" placeholder="Dove vai?" class="field__input" />
           </div>
         </div>
-      </div>
 
-      <div class="meta-row">
-        <div class="field field--sm">
-          <label class="field__label">Data</label>
-          <div class="field__input-wrap">
+        <div class="meta-row">
+          <div class="field">
+            <label class="field__label">Data</label>
             <input type="date" [(ngModel)]="searchDate" class="field__input" />
           </div>
-        </div>
-
-        <div class="field field--sm">
-          <label class="field__label">Orario</label>
-          <div class="field__input-wrap">
+          <div class="field">
+            <label class="field__label">Orario</label>
             <input type="time" [(ngModel)]="searchTime" class="field__input" />
           </div>
+          <button class="btn-search" (click)="find()" [disabled]="!searchPartenza || !searchDestinazione">
+            Cerca corse
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="body-area">
+    <div class="body-area__inner">
+      
+      <div class="left-col">
+        <button class="btn-geo" (click)="getPosition()" [disabled]="geoLoading()">
+          📍 {{ geoLoading() ? 'Analisi fermate…' : 'Trova fermata più vicina' }}
+        </button>
+
+        <div *ngIf="geoError()" class="geo-error">{{ geoError() }}</div>
+
+        <div *ngIf="nearestStop()" class="nearest-card">
+          <div class="nearest-card__top">
+            <span class="nearest-card__label">Fermata più vicina</span>
+            <span class="nearest-card__dot"></span>
+          </div>
+          <p class="nearest-card__address">{{ nearestStop() }}</p>
+          <div class="nearest-card__line">
+            <span class="nearest-card__line-name">Linea: {{ nearestLineName() }}</span>
+          </div>
+          <div class="nearest-card__actions">
+            <button (click)="mapComp.focusStop()" class="nearest-card__btn nearest-card__btn--primary">Mappa</button>
+            <button (click)="mapComp.focusUser()" class="nearest-card__btn nearest-card__btn--ghost">Io</button>
+          </div>
         </div>
 
-        <button class="btn-search" (click)="find()" [disabled]="!searchPartenza || !searchDestinazione">
-          Cerca corse
-        </button>
+        <div class="map-wrap">
+          <app-map-component #mapComp
+            [lat]="userLat" [lng]="userLng"
+            [userLat]="realUserLat" [userLng]="realUserLng"
+            [label]="'Fermata'"
+            [stops]="stopsForMap">
+          </app-map-component>
+        </div>
       </div>
 
-      <!-- GEO -->
-      <div class="geo-row">
-
-        <button class="btn-geo" (click)="Geolocator.getPosition()" [disabled]="geoLoading()">
-          @if (geoLoading()) { Ricerca fermata… }
-          @else { 📍 Usa la mia posizione }
-        </button>
-
-        @if (nearestStop()) {
-          <div class="geo-result">
-            <span class="geo-result__label">Fermata più vicina:</span>
-            <span class="geo-result__value">{{ nearestStop() }}</span>
-          </div>
-        }
-
-        @if (nearestLine()) {
-          <div class="geo-result">
-            <span class="geo-result__label">Linea:</span>
-            <span class="geo-result__value">{{ nearestLine() }}</span>
-          </div>
-        }
-
-        @if (geoError()) {
-          <div class="geo-error">⚠️ {{ geoError() }}</div>
-        }
-
+      <div class="right-col" *ngIf="hasSearched()">
+        <h3 class="results-title">Corse disponibili</h3>
+        <div class="results-list">
+          @for (t of filteredTrips(); track t.id) {
+            <app-trip-list [trip]="t" class="trip-item"></app-trip-list>
+          } @empty {
+            <div class="empty-state">Nessuna corsa trovata.</div>
+          }
+        </div>
       </div>
 
     </div>
-  </div>
+
 
 </div>
-```
 
-  </section>
+<datalist id="city-list">
+  @for (city of availableCities(); track city) {
+    <option [value]="city"></option>
+  }
+</datalist>
 
-  <section class="results-section">
-    <div class="results-inner">
-
-```
-  <div class="results-meta">
-    <h3>Corse disponibili</h3>
-    <span *ngIf="filteredTrips().length">{{ filteredTrips().length }} risultati</span>
-  </div>
-
-  <div class="results-list">
-    @for (t of filteredTrips(); track t.id) {
-      <app-trip-list [trip]="t"></app-trip-list>
-    } @empty {
-      <p>Nessuna corsa trovata</p>
-    }
-  </div>
-
-</div>
-```
-
-  </section>
-
-  <datalist id="city-list">
-    @for (city of availableCities(); track city) {
-      <option [value]="city"></option>
-    }
-  </datalist>
-
-</div>

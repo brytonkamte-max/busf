@@ -1,0 +1,25 @@
+<div class="lines-page">
+
+  <header class="lines-header">
+    <div>
+      <h1 class="lines-title">Linee Bus</h1>
+      <p class="lines-subtitle">Esplora i percorsi e pianifica il tuo viaggio</p>
+    </div>
+
+    
+      
+  </header>
+
+  <div class="lines-grid">
+    @for (ticket of tickets(); track ticket.id) {
+      
+    } @empty {
+      <div class="tickets-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="44" height="44"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <h3>Nessun biglietto trovato</h3>
+      </div>
+    }
+    <button class="btn-search" (click)="addTickets()">Crea e Stampa</button>
+  </div>
+
+</div>

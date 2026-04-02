@@ -35,4 +35,9 @@ export interface PortalUser {
   email: string;
   role: string;
 }
+
+export interface Ticket{
+  id?:number;
+  
+}
  

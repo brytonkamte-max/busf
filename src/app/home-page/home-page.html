@@ -1,81 +1,121 @@
-<div class="dashboard-container">
-  <header class="dashboard-header">
-    <div class="logo-area">
-      <div class="title-text">
+<div class="home">
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section class="home-hero">
+    <div class="home-hero__bg">
+      <img src="/bus-brianza.png" alt="Bus Brianza" class="home-hero__img" />
+      <div class="home-hero__overlay"></div>
+    </div>
+
+    <div class="home-hero__inner">
+      <div class="home-hero__content">
+        
+
+        <h1 class="home-hero__title">
+          @if (PortalUserService.isAdmin()) {
+            Bus Manager <span class="home-hero__accent">v1.0</span>
+          } @else {
+            Brianza<span class="home-hero__accent">Bus</span>
+          }
+        </h1>
+
+        <p class="home-hero__sub">
+          @if (PortalUserService.isAdmin()) {
+            Pannello di controllo per la gestione delle linee e delle corse.
+          } @else {
+            Viaggia comodo. Trova la corsa più vicina a te.
+          }
+        </p>
+
+        
+      </div>
+
+      @if (PortalUserService.isAdmin()) {
+        <div class="kpi-strip">
+          <div class="kpi">
+            <span class="kpi__num">{{ activeLinesCount }}</span>
+            <span class="kpi__label">Linee attive</span>
+          </div>
+          <div class="kpi-divider"></div>
+          <div class="kpi">
+            <span class="kpi__num">{{ totalStopsCount }}</span>
+            <span class="kpi__label">Fermate totali</span>
+          </div>
+          <div class="kpi-divider"></div>
+          <div class="kpi">
+            <span class="kpi__num">{{ driversCount }}</span>
+            <span class="kpi__label">Autisti in servizio</span>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ═══════════════════ NAV CARDS ═══════════════════ -->
+  <section class="home-cards">
+    <div class="home-cards__inner">
+
+      <div class="section-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Accesso rapido
+      </div>
+
+      <div class="cards-grid">
+
+        <div class="nav-card" routerLink="/lines">
+          <div class="nav-card__top">
+            <div class="nav-card__icon nav-card__icon--navy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="24" height="24">
+                <rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 4v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+            </div>
+            <div class="nav-card__arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+          <h3 class="nav-card__title">
+            @if (PortalUserService.isAdmin()) { Gestione Linee } @else { Visualizza Linee }
+          </h3>
+          <p class="nav-card__desc">
+            @if (PortalUserService.isAdmin()) { Crea, modifica e gestisci percorsi e fermate. }
+            @else { Sfoglia tutte le linee disponibili nella rete. }
+          </p>
+        </div>
 
         @if (PortalUserService.isAdmin()) {
-          <h1>Bus Manager <span class="version">v1.0</span></h1>
-          <p>Sistema Gestionale Trasporti</p>
+          <div class="nav-card" routerLink="/trips">
+            <div class="nav-card__top">
+              <div class="nav-card__icon nav-card__icon--green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="24" height="24">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/>
+                </svg>
+              </div>
+              <div class="nav-card__arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+            <h3 class="nav-card__title">Nuova Corsa</h3>
+            <p class="nav-card__desc">Programma e aggiungi nuove corse al calendario.</p>
+          </div>
         }
-        @else {
-          <h1>Brianza<strong class="different">Bus</strong></h1>
-        }
+
+        <div class="nav-card nav-card--accent" routerLink="/Findtrips">
+          <div class="nav-card__top">
+            <div class="nav-card__icon nav-card__icon--white">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="24" height="24">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+            </div>
+            <div class="nav-card__arrow nav-card__arrow--white">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+          <h3 class="nav-card__title nav-card__title--white">Cerca Corse</h3>
+          <p class="nav-card__desc nav-card__desc--white">Trova orari e fermate vicino a te in tempo reale.</p>
+        </div>
+
       </div>
     </div>
+  </section>
 
-    @if (PortalUserService.isAdmin()) {
-      <p>Benvenuto nel pannello di controllo della linea trasporti.</p>
-    }
-    @else {
-      <p>Benvenuto sulla pagina della linea trasporti.</p>
-    }
-  </header>
-
-  @if (PortalUserService.isAdmin()) {
-    <div class="stats-bar">
-
-      <div class="stat-banner">
-        <span class="stat-number">{{ activeLinesCount }}</span>
-        <span class="stat-label">Linee Attive</span>
-      </div>
-
-      <div class="stat-banner">
-        <span class="stat-number">{{ totalStopsCount }}</span>
-        <span class="stat-label">Fermate Totali</span>
-      </div>
-
-      <div class="stat-banner">
-        <span class="stat-number">{{ driversCount }}</span>
-        <span class="stat-label">Autisti in Servizio</span>
-      </div>
-
-    </div>
-  }
-
-  <div class="menu-grid">
-    <div class="menu-card" routerLink="/lines">
-      <div class="card-icon">🚌</div>
-      @if (PortalUserService.isAdmin()) {
-        <h3>Gestione Linee</h3>
-        <p>Visualizza, modifica o crea nuove linee e percorsi.</p>
-      }
-      @else {
-        <h3>Visualizza Linee</h3>
-      }
-
-
-      <button class="btn-go">Entra →</button>
-    </div>
-
-    @if (PortalUserService.isAdmin()) {
-      <div class="menu-card" routerLink="/trips">
-        <div class="card-icon">➕</div>
-        <h3>Nuova Corsa</h3>
-        <p>Aggiungi una nuova corsa.</p>
-        <button class="btn-go">Entra →</button>
-      </div>
-    }
-
-    <div class="menu-card danger" routerLink="/Findtrips">
-      <div class="card-icon">🔍</div>
-      @if (PortalUserService.isAdmin()) {
-        <h3>Cerca Corse</h3>
-        <p>Cerca le corse più recenti.</p>
-      }
-      @else {
-        <h3>Cerca corse recenti</h3>
-      }
-      <button class="btn-go">Entra →</button>
-    </div>
-  </div>
 </div>

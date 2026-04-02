@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+@import "leaflet/dist/leaflet.css";
+
+/* Forza l'altezza della mappa, altrimenti non la vedrai mai */
+#map-container, .map-box, app-map-component {
+  height: 100%;
+  min-height: 400px;
+  display: block;
+}
+
+/* Fix veloce per le icone mancanti */
+.leaflet-default-icon-path {
+  background-image: url(https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png);
+}

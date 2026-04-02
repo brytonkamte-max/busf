@@ -10,6 +10,7 @@ interface MenuItem {
   icon: string;
   route: string;
   requiresAuth?: boolean;
+  role?: string;
 }
 
 @Component({
@@ -25,11 +26,20 @@ export class Menu {
 
   menuItems: MenuItem[] = [
     { label: 'Home', route: '/', icon: '🚌' },
-    { label: 'Dashboard', route: '/trips', icon: '📊', requiresAuth: true },
+    { label: 'Dashboard', route: '/trips', icon: '📊', requiresAuth: true, role: 'ADMIN' },
   ];
 
   get user() {
     return this.portalUserService.loggedUser();
+  }
+
+  get visibleMenuItems(): MenuItem[] {
+    const user = this.user;
+
+    return this.menuItems.filter(item => {
+      if (!item.role) return true;
+      return user?.role === item.role;
+    });
   }
 
   toggleDropdown() {
