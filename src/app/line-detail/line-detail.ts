@@ -63,7 +63,7 @@ export class LineDetail implements OnInit {
 
     if (!currentLine || selectedPos === null) return;
 
-    const isTimeInvalid = this.newStop.time === null || this.newStop.time <= 0;
+    const isTimeInvalid = this.newStop.time === null || this.newStop.time < 0;
     const isTextInvalid = !this.newStop.city.trim() || !this.newStop.address.trim();
 
     if (isTimeInvalid || isTextInvalid) {
