@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PortalUserService } from '../portal-user-service';
 import { BusLineService } from '../bus-line-service';
+import qrcode from 'qrcode-generator';
 
 @Component({
   selector: 'app-trip-list',
@@ -173,6 +174,28 @@ export class TripList {
     });
   }
 
+  generateQRSvg(text: string): string {
+  // Usa la libreria qrcode-generator (npm install qrcode-generator)
+  const qr = qrcode(0, 'M');
+  qr.addData(text);
+  qr.make();
+
+  const moduleCount = qr.getModuleCount();
+  const cellSize = 5;
+  const size = moduleCount * cellSize;
+
+  let cells = '';
+  for (let row = 0; row < moduleCount; row++) {
+    for (let col = 0; col < moduleCount; col++) {
+      if (qr.isDark(row, col)) {
+        cells += `<rect x="${col * cellSize}" y="${row * cellSize}" width="${cellSize}" height="${cellSize}" fill="#000"/>`;
+      }
+    }
+  }
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${cells}</svg>`;
+}
+
   // ── Stampa biglietto ─────────────────────────────────────
   printTicket(): void {
     const stops = this.allStopsSorted;
@@ -180,6 +203,13 @@ export class TripList {
     const today = new Date().toLocaleString('it-IT', {
       day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit'
     });
+      const qrData = JSON.stringify({
+        id: ticketNumber,
+        date:today
+ 
+      });
+
+const qrSvg = this.generateQRSvg(qrData);
 
 
     const stopsRows = stops.map(s => {
@@ -533,11 +563,11 @@ export class TripList {
     </div>
   </div>
 
-  <div class="barcode">
-    ${Array.from({ length: 42 }, (_, i) =>
-      `<div class="barcode__bar" style="width:${[1,2,3][i % 3]}px;height:${28 + (i % 4) * 6}px;opacity:${0.6 + (i % 3) * 0.2}"></div>`
-    ).join('')}
+  <div class="barcode" style="display:flex; justify-content:center; padding: 0 28px 24px;">
+  <div style="background:white; padding:12px; border:1px solid #dde3eb; border-radius:8px; display:inline-block;">
+    ${qrSvg}
   </div>
+</div>
 
 </div>
 <script>window.print(); window.onafterprint = () => window.close();</script>
