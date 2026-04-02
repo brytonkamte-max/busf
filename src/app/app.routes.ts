@@ -20,7 +20,7 @@ export const routes: Routes = [
   { path: 'lines/:id', component: LineDetail },
  
   //Solo admin (Loggato) può accedere a questa rotta
-  { path: 'trips', component: TripComponent, canActivate: [authGuard] },
+  { path: 'trips', component: TripComponent, canActivate: [authGuard], data: {role: ['ADMIN']}},
   
   { path: 'Findtrips', component: FindTrip },
 
