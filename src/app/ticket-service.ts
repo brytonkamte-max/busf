@@ -8,16 +8,25 @@ import { Ticket } from './model/entities';
   providedIn: 'root',
 })
 export class TicketService {
-  private apiTicketsUrl = 'http://localhost:8080/api/tickets';
+  private apiUrl = 'http://localhost:8080/api/tickets';
   
  
   constructor(private http: HttpClient) {}
  
   
-  getTickets(): Observable<Ticket[]> {
-    return this.http.get<Ticket[]>(this.apiTicketsUrl);
+  getAll(): Observable<Ticket[]> {
+    return this.http.get<Ticket[]>(this.apiUrl);
   }
-  postTickets(ticket:string):Observable<Ticket> {
-    return this.http.post<Ticket>(this.apiTicketsUrl,ticket);
+ 
+  getByUser(userId: number): Observable<Ticket[]> {
+    return this.http.get<Ticket[]>(`${this.apiUrl}/user/${userId}`);
+  }
+ 
+  create(ticket: Omit<Ticket, 'id'>): Observable<Ticket> {
+    return this.http.post<Ticket>(this.apiUrl, ticket);
+  }
+ 
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

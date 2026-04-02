@@ -37,7 +37,13 @@ export interface PortalUser {
 }
 
 export interface Ticket{
-  id?:number;
+ id?: number;
+  date: string;
+  tripId: number;
+  userId: number;
+  // Campi extra se il backend facesse un "join"
+  trip?: Trip; 
+  user?: PortalUser;
   
 }
  
