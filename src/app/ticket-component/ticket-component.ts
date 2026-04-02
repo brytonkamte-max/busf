@@ -1,12 +1,13 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Ticket, Trip } from '../model/entities';
+import { Line, Ticket, Trip } from '../model/entities';
 
 import { BusTripService } from '../bus-trip-service';
 import { PortalUserService } from '../portal-user-service';
 import qrcode from 'qrcode-generator';
 import { TicketService } from '../ticket-service';
+import { BusLineService } from '../bus-line-service';
 
 @Component({
   selector: 'app-ticket-component',
@@ -16,38 +17,45 @@ import { TicketService } from '../ticket-service';
   styleUrl: './ticket-component.css',
 })
 export class TicketComponent implements OnInit {
+  private ticketService = inject(TicketService);
+  private tripService = inject(BusTripService);
+  private lineService = inject(BusLineService);
+  public portalUser = inject(PortalUserService);
 
-  private ticketService  = inject(TicketService);
-  private tripService    = inject(BusTripService);
-  public  portalUser     = inject(PortalUserService);
+  tickets = signal<Ticket[]>([]);
+  trips = signal<Trip[]>([]);
+  lines = signal<Line[]>([]);
+  loading = signal(false);
+  error = signal<string | null>(null);
 
-  // ── State ──────────────────────────────────────────────
-  tickets  = signal<Ticket[]>([]);
-  trips    = signal<Trip[]>([]);
-  loading  = signal(false);
-  error    = signal<string | null>(null);
-
-  // ── Add form ───────────────────────────────────────────
-  showForm     = signal(false);
-  formTripId   = signal<number | null>(null);
-  formDate     = signal('');
-  formLoading  = signal(false);
-  formError    = signal<string | null>(null);
+  showForm = signal(false);
+  formTripId = signal<number | null>(null);
+  formDate = signal('');
+  formLoading = signal(false);
+  formError = signal<string | null>(null);
 
   ngOnInit(): void {
     this.loadData();
   }
 
-  // ── Data loading ───────────────────────────────────────
   public loadData(): void {
     this.loading.set(true);
     this.error.set(null);
 
-    // Carica sempre le corse (servono per il form e per la stampa)
     this.tripService.getTrips().subscribe({
       next: (trips) => {
         this.trips.set(trips);
-        this.loadTickets();
+
+        this.lineService.getLines().subscribe({
+          next: (lines) => {
+            this.lines.set(lines);
+            this.loadTickets();
+          },
+          error: () => {
+            this.error.set('Errore nel caricamento delle linee.');
+            this.loading.set(false);
+          }
+        });
       },
       error: () => {
         this.error.set('Errore nel caricamento delle corse.');
@@ -57,22 +65,26 @@ export class TicketComponent implements OnInit {
   }
 
   private loadTickets(): void {
-    const user = this.portalUser.loggedUser();
+    let user = this.portalUser.loggedUser();
 
-    // ADMIN vede tutti i ticket; BIGLIETTAIO vede solo i propri
-    const obs$ = this.portalUser.isAdmin()
+    let obs$ = this.portalUser.isAdmin()
       ? this.ticketService.getAll()
       : this.ticketService.getByUser(user!.id!);
 
     obs$.subscribe({
-      next:  (t) => { this.tickets.set(t); this.loading.set(false); },
-      error: ()  => { this.error.set('Errore nel caricamento dei biglietti.'); this.loading.set(false); }
+      next: (t) => {
+        this.tickets.set(t);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Errore nel caricamento dei biglietti.');
+        this.loading.set(false);
+      }
     });
   }
 
-  // ── Form helpers ───────────────────────────────────────
   openForm(): void {
-    const today = new Date().toISOString().split('T')[0];
+    let today = new Date().toISOString().split('T')[0];
     this.formDate.set(today);
     this.formTripId.set(null);
     this.formError.set(null);
@@ -84,14 +96,15 @@ export class TicketComponent implements OnInit {
   }
 
   submitTicket(): void {
-    const user   = this.portalUser.loggedUser();
-    const tripId = this.formTripId();
-    const date   = this.formDate();
+    let user = this.portalUser.loggedUser();
+    let tripId = this.formTripId();
+    let date = this.formDate();
 
     if (!tripId || !date) {
       this.formError.set('Seleziona una corsa e una data.');
       return;
     }
+
     if (!user?.id) {
       this.formError.set('Utente non autenticato.');
       return;
@@ -113,7 +126,6 @@ export class TicketComponent implements OnInit {
     });
   }
 
-  // ── Delete ─────────────────────────────────────────────
   removeTicket(id: number): void {
     this.ticketService.delete(id).subscribe({
       next: () => this.tickets.update(list => list.filter(t => t.id !== id)),
@@ -121,17 +133,18 @@ export class TicketComponent implements OnInit {
     });
   }
 
-  // ── Trip helpers ───────────────────────────────────────
   getTripById(id: number): Trip | undefined {
     return this.trips().find(t => t.id === id);
   }
 
   getTripLabel(tripId: number): string {
-    const trip = this.getTripById(tripId);
+    let trip = this.getTripById(tripId);
     if (!trip) return `Corsa #${tripId}`;
-    const dep = trip.start?.slice(0, 5) ?? '--:--';
-    const first = this.getFirstCity(trip);
-    const last  = this.getLastCity(trip);
+
+    let dep = trip.start?.slice(0, 5) ?? '--:--';
+    let first = this.getFirstCity(trip);
+    let last = this.getLastCity(trip);
+
     return `#${tripId} · ${dep} · ${first} → ${last}`;
   }
 
@@ -144,70 +157,111 @@ export class TicketComponent implements OnInit {
   }
 
   getLastCity(trip: Trip): string {
-    const s = this.sortedStops(trip);
+    let s = this.sortedStops(trip);
     return s[s.length - 1]?.city ?? 'N/A';
   }
 
   addMinutes(time: string, mins: number): string {
     if (!time) return '--:--';
-    const [h, m] = time.split(':').map(Number);
-    const d = new Date();
+
+    let [h, m] = time.split(':').map(Number);
+    let d = new Date();
     d.setHours(h, m + mins);
+
     return d.toTimeString().slice(0, 5);
   }
 
   getArrival(trip: Trip): string {
-    const last  = this.sortedStops(trip).pop();
-    const delay = Math.round((trip.trafficMultiplier || 0) * 60);
+    let last = this.sortedStops(trip).pop();
+    let delay = Math.round((trip.trafficMultiplier || 0) * 60);
     return this.addMinutes(trip.start, (last?.time || 0) + delay);
   }
 
-  // ── QR generator ─────────────────────────────────────
-  private generateQRSvg(text: string): string {
-    const qr = qrcode(0, 'M');
-    qr.addData(text);
-    qr.make();
-    const n = qr.getModuleCount();
-    const c = 5;
-    let cells = '';
-    for (let r = 0; r < n; r++)
-      for (let k = 0; k < n; k++)
-        if (qr.isDark(r, k))
-          cells += `<rect x="${k*c}" y="${r*c}" width="${c}" height="${c}" fill="#000"/>`;
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${n*c}" height="${n*c}" viewBox="0 0 ${n*c} ${n*c}">${cells}</svg>`;
+  getLineName(trip: Trip): string {
+    if (trip.line?.name) {
+      return trip.line.name;
+    }
+
+    if ((trip as any).lineName) {
+      return (trip as any).lineName;
+    }
+
+    let lineId =
+      trip.line?.id ??
+      (trip as any).lineId ??
+      null;
+
+    if (lineId != null) {
+      let foundLine = this.lines().find(l => l.id === lineId);
+
+      if (foundLine?.name) {
+        return foundLine.name;
+      }
+
+      return `Linea #${lineId}`;
+    }
+
+    return 'Linea sconosciuta';
   }
 
-  // ── Print ──────────────────────────────────────────────
+  private generateQRSvg(text: string): string {
+    let qr = qrcode(0, 'M');
+    qr.addData(text);
+    qr.make();
+
+    let n = qr.getModuleCount();
+    let c = 5;
+    let cells = '';
+
+    for (let r = 0; r < n; r++) {
+      for (let k = 0; k < n; k++) {
+        if (qr.isDark(r, k)) {
+          cells += `<rect x="${k * c}" y="${r * c}" width="${c}" height="${c}" fill="#000"/>`;
+        }
+      }
+    }
+
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${n * c}" height="${n * c}" viewBox="0 0 ${n * c} ${n * c}">${cells}</svg>`;
+  }
+
   printTicket(ticket: Ticket): void {
-    const trip = this.getTripById(ticket.tripId);
-    if (!trip) { alert('Dati della corsa non disponibili.'); return; }
+    let trip = this.getTripById(ticket.tripId);
+    if (!trip) {
+      alert('Dati della corsa non disponibili.');
+      return;
+    }
 
-    const stops      = this.sortedStops(trip);
-    const ticketNum  = `BUS-${ticket.id}-${Date.now().toString(36).toUpperCase()}`;
-    const emitDate   = new Date().toLocaleString('it-IT', {
-      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    let stops = this.sortedStops(trip);
+    let ticketNum = `BUS-${ticket.id}-${Date.now().toString(36).toUpperCase()}`;
+    let emitDate = new Date().toLocaleString('it-IT', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
-    const delay      = Math.round((trip.trafficMultiplier || 0) * 60);
-    const lineName   = trip.line?.name ?? '—';
-    const dayLabel   = trip.dayType ?? '—';
-    const seasonLbl  = trip.season === 'SUMMER' ? 'Estivo' : 'Invernale';
-    const dep        = trip.start?.slice(0, 5) ?? '--:--';
-    const arr        = this.getArrival(trip);
-    const first      = this.getFirstCity(trip);
-    const last       = this.getLastCity(trip);
 
-    const delayBanner = delay > 0
+    let delay = Math.round((trip.trafficMultiplier || 0) * 60);
+    let lineName = this.getLineName(trip);
+    let dayLabel = trip.dayType ?? '—';
+    let seasonLbl = trip.season === 'SUMMER' ? 'Estivo' : 'Invernale';
+    let dep = trip.start?.slice(0, 5) ?? '--:--';
+    let arr = this.getArrival(trip);
+    let first = this.getFirstCity(trip);
+    let last = this.getLastCity(trip);
+
+    let delayBanner = delay > 0
       ? `<div class="delay-banner">⚠️ Ritardo stimato: <strong>+${delay} min</strong> per traffico</div>`
       : '';
 
-    const stopsRows = stops.map(s => {
-      const t = s.time != null ? this.addMinutes(trip.start, s.time) : '--:--';
+    let stopsRows = stops.map(s => {
+      let t = s.time != null ? this.addMinutes(trip.start, s.time) : '--:--';
       return `<tr><td>${s.position}</td><td>${s.city}</td><td>${s.address || '—'}</td><td class="tc">${t}</td></tr>`;
     }).join('');
 
-    const qrSvg = this.generateQRSvg(JSON.stringify({ id: ticketNum, emesso: emitDate }));
+    let qrSvg = this.generateQRSvg(JSON.stringify({ id: ticketNum, emesso: emitDate }));
 
-    const html = `<!DOCTYPE html>
+    let html = `<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8"/>
@@ -217,7 +271,6 @@ export class TicketComponent implements OnInit {
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#f4f6f8;color:#0f1923;padding:32px 24px}
 .ticket{max-width:680px;margin:0 auto;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,.12)}
-/* header */
 .hd{background:#003366;padding:22px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:flex;align-items:center;gap:10px}
 .brand-logo{height:44px;width:auto;object-fit:contain}
@@ -227,22 +280,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#f4f6f8;color:#0f1923
 .num-label{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45)}
 .num-value{font-size:13px;font-weight:700;color:rgba(255,255,255,.85);font-family:monospace;letter-spacing:.06em}
 .trip-id{margin-top:4px;font-size:11px;font-weight:700;color:rgba(255,255,255,.85)}
-/* route */
 .route{background:#00A651;padding:16px 28px;display:flex;align-items:center;gap:12px}
 .rcity{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em;flex:1}
 .rcity-r{text-align:right}
 .rarr{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.6);flex-shrink:0}
 .rline{height:2px;width:44px;background:rgba(255,255,255,.35);border-radius:1px}
-/* delay */
 .delay-banner{background:#fffbeb;border-bottom:1px solid #fcd34d;padding:9px 28px;font-size:12px;color:#92400e;font-weight:600}
-/* meta grid */
 .mg{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #dde3eb}
 .mc{padding:14px 18px;border-right:1px solid #dde3eb}
 .mc:last-child{border-right:none}
 .mc-l{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#6b7280;margin-bottom:4px}
 .mc-v{font-size:18px;font-weight:800;color:#0f1923;line-height:1}
 .mc-v.green{color:#00A651}.mc-v.navy{color:#003366}.mc-v.sm{font-size:13px;margin-top:2px}
-/* stops */
 .sp{padding:18px 28px 8px}
 .sp-title{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#6b7280;margin-bottom:10px}
 table{width:100%;border-collapse:collapse}
@@ -252,11 +301,9 @@ tbody tr:last-child td{border-bottom:none}
 tbody tr:first-child td{color:#003366;font-weight:700}
 tbody tr:last-child td{color:#007a3c;font-weight:700}
 .tc{font-weight:800;font-size:13px;font-family:monospace;color:#003366}
-/* footer */
 .ft{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-top:1.5px dashed #dde3eb;margin-top:8px}
 .ft-note{font-size:10px;color:#6b7280;font-weight:500;line-height:1.55}
 .ft-date{font-size:11px;font-weight:700;color:#003366;text-align:right;line-height:1.6}
-/* qr */
 .qr-wrap{display:flex;justify-content:center;padding:4px 0 22px}
 .qr-box{background:#fff;padding:10px;border:1px solid #dde3eb;border-radius:8px;display:inline-block}
 @media print{body{background:#fff;padding:0}.ticket{box-shadow:none;border-radius:0;max-width:100%}}
@@ -314,7 +361,10 @@ tbody tr:last-child td{color:#007a3c;font-weight:700}
 </body>
 </html>`;
 
-    const win = window.open('', '_blank', 'width=760,height=920');
-    if (win) { win.document.write(html); win.document.close(); }
+    let win = window.open('', '_blank', 'width=760,height=920');
+    if (win) {
+      win.document.write(html);
+      win.document.close();
+    }
   }
 }

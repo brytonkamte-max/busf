@@ -119,24 +119,40 @@ export class FindTrip implements OnInit {
   }
 
   find(): void {
-    this.tripService.getTrips().subscribe(allTrips => {
-      let filtered = allTrips.filter(t => {
-        let hasStart = t.stops?.some(s =>
-          s.city.toLowerCase().includes(this.searchPartenza.toLowerCase())
-        );
+    this.tripService.getTrips().subscribe({
+      next: (allTrips) => {
+        let filtered = allTrips.filter(t => {
+          let stops = t.stops || [];
 
-        let hasEnd = t.stops?.some(s =>
-          s.city.toLowerCase().includes(this.searchDestinazione.toLowerCase())
-        );
+          let startIndex = stops.findIndex(s =>
+            this.normalizeString(s.city) === this.normalizeString(this.searchPartenza)
+          );
 
-        let matchesDate = this.searchDate ? t.date === this.searchDate : true;
-        let matchesTime = this.searchTime ? t.start >= (this.searchTime + ':00') : true;
+          let endIndex = stops.findIndex(s =>
+            this.normalizeString(s.city) === this.normalizeString(this.searchDestinazione)
+          );
 
-        return !!hasStart && !!hasEnd && matchesDate && matchesTime;
-      });
+          let correctDirection =
+            startIndex !== -1 &&
+            endIndex !== -1 &&
+            startIndex < endIndex;
 
-      this.filteredTrips.set(filtered.slice(-4));
-      this.hasSearched.set(true);
+          let matchesDate = this.searchDate ? t.date === this.searchDate : true;
+          let matchesTime = this.searchTime ? t.start >= (this.searchTime + ':00') : true;
+
+          return correctDirection && matchesDate && matchesTime;
+        });
+
+        this.filteredTrips.set(filtered.slice(-4));
+        this.hasSearched.set(true);
+
+        console.log('--- DEBUG: RISULTATI FILTRATI ---', filtered);
+      },
+      error: (err) => {
+        console.error('Errore ricerca trips:', err);
+        this.filteredTrips.set([]);
+        this.hasSearched.set(true);
+      }
     });
   }
 
