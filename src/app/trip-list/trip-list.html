@@ -4,7 +4,7 @@
   <div class="trip-card__route">
     <div class="line-badge">
       <span class="line-badge__label">Linea</span>
-      <span class="line-badge__name">{{ trip.line?.name }}</span>
+      <span class="line-badge__name">{{ resolvedLineName() }}</span>
     </div>
     <div class="route-path">
       <span class="route-city">{{ firstStop }}</span>
@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  <!-- Right: Meta badges + actions -->
+  <!-- Right: Meta badges -->
   <div class="trip-card__meta">
     <div class="badges">
       <span class="badge" [ngClass]="'badge--' + (trip.dayType?.toLowerCase() || '')">
@@ -57,18 +57,6 @@
       </span>
     </div>
     <span class="trip-date">{{ trip.date | date:'dd/MM/yyyy' }}</span>
-
-    <!-- Stampa biglietto -->
-    @if (portalUserService.isBigliettaio() || portalUserService.isAdmin()) {
-    <button class="btn-print" (click)="printTicket()" type="button" title="Stampa biglietto">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-        <polyline points="6 9 6 2 18 2 18 9"/>
-        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-        <rect x="6" y="14" width="12" height="8"/>
-      </svg>
-      Stampa biglietto
-    </button>
-  }
   </div>
 
   <!-- Delete (solo admin) -->

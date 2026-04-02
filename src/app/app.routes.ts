@@ -7,6 +7,7 @@ import { TripComponent } from './trip-component/trip-component';
 import { FindTrip } from './find-trip/find-trip';
 import { Authentication } from './authentication/authentication';
 import { authGuard } from './guards/authGuards';
+import { TicketComponent } from './ticket-component/ticket-component';
 
 
 
@@ -23,5 +24,6 @@ export const routes: Routes = [
   { path: 'trips', component: TripComponent, canActivate: [authGuard], data: {role: ['ADMIN']}},
   
   { path: 'Findtrips', component: FindTrip },
+  { path: 'tickets', component: TicketComponent, canActivate: [authGuard], data: {role: ['BIGLIETTAIO']} },
 
 ];
