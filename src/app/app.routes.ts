@@ -24,6 +24,7 @@ export const routes: Routes = [
   { path: 'trips', component: TripComponent, canActivate: [authGuard], data: {role: ['ADMIN']}},
   
   { path: 'Findtrips', component: FindTrip },
-  { path: 'tickets', component: TicketComponent, canActivate: [authGuard], data: {role: ['BIGLIETTAIO']} },
+  { path: 'tickets', component: TicketComponent, canActivate: [authGuard], data: {role: ['BIGLIETTAIO', 'ADMIN']} },
+
 
 ];
